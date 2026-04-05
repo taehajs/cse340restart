@@ -1,13 +1,13 @@
-function buildHome(req, res) {
-  res.render("index", { title: "Home", message: "Welcome to Assignment 2!" });
+async function buildHome(req, res) {
+  res.render("index", { title: "Home", message: "Welcome to the site!" });
 }
 
-function buildAbout(req, res) {
-  res.render("about", { title: "About Us", message: "This is the about page." });
+async function buildAbout(req, res) {
+  res.render("index", { title: "About", message: "This is the about page." });
 }
 
-function buildContact(req, res) {
-  res.render("contact", { title: "Contact", message: "Get in touch with us." });
+async function buildContact(req, res) {
+  res.render("index", { title: "Contact", message: "Contact us here." });
 }
 
 module.exports = { buildHome, buildAbout, buildContact };

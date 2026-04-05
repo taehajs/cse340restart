@@ -1,6 +1,20 @@
 const inventoryModel = require("../models/inventoryModel");
 const utilities = require("../utilities");
 
+async function buildManagement(req, res) {
+  res.render("inventory/management", {
+    title: "Inventory Management",
+    message: req.flash("notice")
+  });
+}
+
+async function buildAddClassification(req, res) {
+  res.render("inventory/add-classification", {
+    title: "Add Classification",
+    message: req.flash("notice")
+  });
+}
+
 async function addClassification(req, res) {
   try {
     const { classification_name } = req.body;
@@ -34,6 +48,15 @@ async function addClassification(req, res) {
     req.flash("notice", "An unexpected error occurred.");
     res.redirect("/inv/");
   }
+}
+
+async function buildAddInventory(req, res) {
+  const classificationList = await utilities.buildClassificationList();
+  res.render("inventory/add-inventory", {
+    title: "Add Inventory",
+    classificationList,
+    message: req.flash("notice")
+  });
 }
 
 async function addInventory(req, res) {
@@ -70,6 +93,69 @@ async function addInventory(req, res) {
     }
   } catch (error) {
     console.error("Error adding inventory:", error);
+    req.flash("notice", "An unexpected error occurred.");
+    res.redirect("/inv/");
+  }
+}
+
+async function buildEditInventory(req, res) {
+  const invId = req.params.invId;
+  const itemData = await inventoryModel.getInventoryById(invId);
+  const classificationList = await utilities.buildClassificationList(itemData.classification_id);
+  res.render("inventory/edit-inventory", {
+    title: "Edit Inventory",
+    classificationList,
+    ...itemData,
+    message: req.flash("notice")
+  });
+}
+
+async function updateInventory(req, res) {
+  try {
+    const data = req.body;
+    const result = await inventoryModel.updateInventory(data);
+    if (result) {
+      req.flash("notice", "Inventory updated successfully.");
+      res.redirect("/inv/");
+    } else {
+      req.flash("notice", "Failed to update inventory.");
+      const classificationList = await utilities.buildClassificationList(data.classification_id);
+      res.render("inventory/edit-inventory", {
+        title: "Edit Inventory",
+        classificationList,
+        ...data
+      });
+    }
+  } catch (error) {
+    console.error("Error updating inventory:", error);
+    req.flash("notice", "An unexpected error occurred.");
+    res.redirect("/inv/");
+  }
+}
+
+async function buildDeleteInventory(req, res) {
+  const invId = req.params.invId;
+  const itemData = await inventoryModel.getInventoryById(invId);
+  res.render("inventory/delete-confirm", {
+    title: "Delete Inventory",
+    ...itemData,
+    message: req.flash("notice")
+  });
+}
+
+async function deleteInventory(req, res) {
+  try {
+    const { inv_id } = req.body;
+    const result = await inventoryModel.deleteInventory(inv_id);
+    if (result) {
+      req.flash("notice", "Inventory deleted successfully.");
+      res.redirect("/inv/");
+    } else {
+      req.flash("notice", "Failed to delete inventory.");
+      res.redirect(`/inv/delete/${inv_id}`);
+    }
+  } catch (error) {
+    console.error("Error deleting inventory:", error);
     req.flash("notice", "An unexpected error occurred.");
     res.redirect("/inv/");
   }
