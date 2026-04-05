@@ -1,17 +1,25 @@
-const pool = require("../database");
+const inventoryModel = require("../models/inventoryModel");
 
 async function buildClassificationList(selectedId) {
-  try {
-    const data = await pool.query("SELECT * FROM classification ORDER BY classification_name");
-    let options = "";
-    data.rows.forEach(row => {
-      options += `<option value="${row.classification_id}" ${row.classification_id == selectedId ? "selected" : ""}>${row.classification_name}</option>`;
-    });
-    return `<select name="classification_id" id="classification_id">${options}</select>`;
-  } catch (error) {
-    console.error("Error building classification list:", error);
-    return "";
-  }
+  const data = await inventoryModel.getClassifications();
+  let list = "";
+  data.forEach(row => {
+    list += `<option value="${row.classification_id}" ${row.classification_id == selectedId ? "selected" : ""}>${row.classification_name}</option>`;
+  });
+  return list;
 }
 
-module.exports = { buildClassificationList };
+function checkClassificationName(name) {
+  return name && name.trim().length > 0;
+}
+
+function checkInventoryData(data) {
+  const requiredFields = ["inv_make", "inv_model", "inv_year", "inv_price", "inv_color", "classification_id"];
+  return requiredFields.every(field => data[field] && data[field].toString().trim() !== "");
+}
+
+module.exports = {
+  buildClassificationList,
+  checkClassificationName,
+  checkInventoryData
+};

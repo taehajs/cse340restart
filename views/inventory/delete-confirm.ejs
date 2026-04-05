@@ -1,0 +1,8 @@
+<h1><%= title %></h1>
+<p><%= message %></p>
+<p>Are you sure you want to delete <%= inv_make %> <%= inv_model %>?</p>
+<form method="post" action="/inv/delete">
+  <input type="hidden" name="inv_id" value="<%= inv_id %>">
+  <button type="submit">Delete</button>
+</form>
+<a href="/inv/">Cancel</a>
