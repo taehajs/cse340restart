@@ -1,7 +1,8 @@
+<%- include("../shared/header") %>
 <h1><%= title %></h1>
 <p><%= message %></p>
 
-<form method="post" action="/inv/add-inventory">
+<form method="post" action="/inventory/add-inventory">
   <label for="inv_make">Make:</label>
   <input type="text" id="inv_make" name="inv_make" value="<%= inv_make || '' %>">
 
@@ -24,3 +25,4 @@
 
   <button type="submit">Add Inventory</button>
 </form>
+<%- include("../shared/footer") %>

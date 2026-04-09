@@ -4,10 +4,10 @@ async function addClassification(name) {
   try {
     const sql = "INSERT INTO classification (classification_name) VALUES ($1)";
     const result = await pool.query(sql, [name]);
-    return result.rowCount;
+    return result.rowCount; // 성공 시 1 반환
   } catch (error) {
     console.error("addClassification error:", error);
-    return null;
+    throw error;
   }
 }
 
@@ -18,7 +18,7 @@ async function getClassifications() {
     return result.rows;
   } catch (error) {
     console.error("getClassifications error:", error);
-    return [];
+    throw error;
   }
 }
 
@@ -36,7 +36,7 @@ async function addInventory(data) {
     return result.rowCount;
   } catch (error) {
     console.error("addInventory error:", error);
-    return null;
+    throw error;
   }
 }
 
@@ -47,9 +47,10 @@ async function getInventoryById(invId) {
     return result.rows[0];
   } catch (error) {
     console.error("getInventoryById error:", error);
-    return null;
+    throw error;
   }
 }
+
 
 async function updateInventory(data) {
   try {
@@ -67,7 +68,7 @@ async function updateInventory(data) {
     return result.rowCount;
   } catch (error) {
     console.error("updateInventory error:", error);
-    return null;
+    throw error;
   }
 }
 
@@ -78,7 +79,7 @@ async function deleteInventory(invId) {
     return result.rowCount;
   } catch (error) {
     console.error("deleteInventory error:", error);
-    return null;
+    throw error;
   }
 }
 

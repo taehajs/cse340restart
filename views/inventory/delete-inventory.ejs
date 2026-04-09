@@ -1,0 +1,8 @@
+<%- include("../shared/header") %>
+<h1><%= title %></h1>
+<p>Are you sure you want to delete <%= item.inv_make %> <%= item.inv_model %>?</p>
+<form action="/inventory/delete" method="POST">
+  <input type="hidden" name="inv_id" value="<%= item.inv_id %>">
+  <button type="submit">Delete</button>
+</form>
+<%- include("../shared/footer") %>
