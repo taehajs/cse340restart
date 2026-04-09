@@ -1,0 +1,31 @@
+<%- include("../shared/header") %>
+<h1><%= title %></h1>
+<% if (errors && errors.length > 0) { %>
+  <ul>
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+
+<form method="post" action="/account/update-info">
+  <input type="hidden" name="account_id" value="<%= account.account_id %>">
+  <label>First Name:</label>
+  <input type="text" name="first_name" value="<%= account.first_name %>" required>
+  <label>Last Name:</label>
+  <input type="text" name="last_name" value="<%= account.last_name %>" required>
+  <label>Email:</label>
+  <input type="email" name="email" value="<%= account.email %>" required>
+  <button type="submit">Update Account</button>
+</form>
+
+>
+<form method="post" action="/account/update-password">
+  <input type="hidden" name="account_id" value="<%= account.account_id %>">
+  <label>New Password:</label>
+  <input type="password" name="password" required>
+  <p>Password must be at least 8 characters, include letters and numbers.</p>
+  <button type="submit">Change Password</button>
+</form>
+<%- include("../shared/footer") %>
