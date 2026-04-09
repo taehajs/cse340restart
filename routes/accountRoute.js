@@ -2,13 +2,10 @@ const express = require("express");
 const router = new express.Router();
 const accountController = require("../controllers/accountController");
 
-router.get("/login", (req, res) => {
-  res.render("account/login", { title: "Login" });
-});
-
 router.get("/management", accountController.buildManagement);
-
-
-router.get("/update/:id", accountController.buildUpdate);
+router.get("/update/:id", accountController.buildUpdateView);
+router.post("/update", accountController.updateAccountInfo);
+router.post("/update-password", accountController.updatePassword);
+router.get("/logout", accountController.logout);
 
 module.exports = router;

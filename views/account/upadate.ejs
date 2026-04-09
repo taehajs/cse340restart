@@ -1,17 +1,24 @@
 <%- include("../shared/header") %>
 <h1>Update Account</h1>
-<form method="post" action="/account/update/<%= account_id %>">
+<form method="post" action="/account/update">
+  <input type="hidden" name="account_id" value="<%= account.account_id %>">
   <label>First Name:</label>
-  <input type="text" name="first_name" value="<%= firstName %>" required>
+  <input type="text" name="first_name" value="<%= account.first_name %>" required>
   <label>Last Name:</label>
-  <input type="text" name="last_name" value="<%= lastName %>" required>
-  <button type="submit">Update</button>
+  <input type="text" name="last_name" value="<%= account.last_name %>" required>
+  <label>Email:</label>
+  <input type="email" name="email" value="<%= account.email %>" required>
+  <button type="submit">Update Info</button>
 </form>
 
 <h2>Change Password</h2>
-<form method="post" action="/account/update-password/<%= account_id %>">
+<form method="post" action="/account/update-password">
+  <input type="hidden" name="account_id" value="<%= account.account_id %>">
   <label>New Password:</label>
   <input type="password" name="password" required>
   <button type="submit">Change Password</button>
 </form>
+<% if (errors) { errors.forEach(e => { %>
+  <p style="color:red"><%= e.msg %></p>
+<% }) } %>
 <%- include("../shared/footer") %>
