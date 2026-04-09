@@ -18,35 +18,27 @@ async function buildAddClassification(req, res) {
 async function addClassification(req, res) {
   try {
     const { classification_name } = req.body;
-    const errors = [];
 
     if (!utilities.checkClassificationName(classification_name)) {
-      errors.push({ msg: "Classification name is required." });
-    }
-
-    if (errors.length > 0) {
       return res.render("inventory/add-classification", {
         title: "Add Classification",
         classification_name,
-        errors
+        errors: [{ msg: "Classification name is required." }]
       });
     }
 
     const result = await inventoryModel.addClassification(classification_name.trim());
     if (result) {
       req.flash("notice", "Classification added successfully.");
-      res.redirect("/inv/");
+      res.redirect("/inventory");
     } else {
       req.flash("notice", "Failed to add classification.");
-      res.render("inventory/add-classification", {
-        title: "Add Classification",
-        classification_name
-      });
+      res.render("inventory/add-classification", { title: "Add Classification", classification_name });
     }
   } catch (error) {
     console.error("Error adding classification:", error);
     req.flash("notice", "An unexpected error occurred.");
-    res.redirect("/inv/");
+    res.redirect("/inventory");
   }
 }
 
@@ -62,39 +54,30 @@ async function buildAddInventory(req, res) {
 async function addInventory(req, res) {
   try {
     const data = req.body;
-    const errors = [];
 
     if (!utilities.checkInventoryData(data)) {
-      errors.push({ msg: "All required fields must be filled." });
-    }
-
-    if (errors.length > 0) {
       const classificationList = await utilities.buildClassificationList(data.classification_id);
       return res.render("inventory/add-inventory", {
         title: "Add Inventory",
         classificationList,
         ...data,
-        errors
+        errors: [{ msg: "All required fields must be filled." }]
       });
     }
 
     const result = await inventoryModel.addInventory(data);
     if (result) {
       req.flash("notice", "Inventory item added successfully.");
-      res.redirect("/inv/");
+      res.redirect("/inventory");
     } else {
       req.flash("notice", "Failed to add inventory.");
       const classificationList = await utilities.buildClassificationList(data.classification_id);
-      res.render("inventory/add-inventory", {
-        title: "Add Inventory",
-        classificationList,
-        ...data
-      });
+      res.render("inventory/add-inventory", { title: "Add Inventory", classificationList, ...data });
     }
   } catch (error) {
     console.error("Error adding inventory:", error);
     req.flash("notice", "An unexpected error occurred.");
-    res.redirect("/inv/");
+    res.redirect("/inventory");
   }
 }
 
@@ -116,20 +99,16 @@ async function updateInventory(req, res) {
     const result = await inventoryModel.updateInventory(data);
     if (result) {
       req.flash("notice", "Inventory updated successfully.");
-      res.redirect("/inv/");
+      res.redirect("/inventory");
     } else {
       req.flash("notice", "Failed to update inventory.");
       const classificationList = await utilities.buildClassificationList(data.classification_id);
-      res.render("inventory/edit-inventory", {
-        title: "Edit Inventory",
-        classificationList,
-        ...data
-      });
+      res.render("inventory/edit-inventory", { title: "Edit Inventory", classificationList, ...data });
     }
   } catch (error) {
     console.error("Error updating inventory:", error);
     req.flash("notice", "An unexpected error occurred.");
-    res.redirect("/inv/");
+    res.redirect("/inventory");
   }
 }
 
@@ -149,15 +128,15 @@ async function deleteInventory(req, res) {
     const result = await inventoryModel.deleteInventory(inv_id);
     if (result) {
       req.flash("notice", "Inventory deleted successfully.");
-      res.redirect("/inv/");
+      res.redirect("/inventory");
     } else {
       req.flash("notice", "Failed to delete inventory.");
-      res.redirect(`/inv/delete/${inv_id}`);
+      res.redirect(`/inventory/delete/${inv_id}`);
     }
   } catch (error) {
     console.error("Error deleting inventory:", error);
     req.flash("notice", "An unexpected error occurred.");
-    res.redirect("/inv/");
+    res.redirect("/inventory");
   }
 }
 
