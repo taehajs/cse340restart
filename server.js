@@ -1,3 +1,5 @@
+require("dotenv").config(); 
+
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -16,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 
+
 app.use((req, res, next) => {
   res.locals.loggedIn = req.cookies.jwt ? true : false;
   res.locals.accountType = req.cookies.accountType || null;
@@ -23,13 +26,16 @@ app.use((req, res, next) => {
   next();
 });
 
+
 app.use("/", homeRoute);
 app.use("/inventory", inventoryRoute);
 app.use("/account", accountRoute);
 
+
 app.use((req, res) => {
   res.status(404).render("shared/404", { title: "Page Not Found" });
 });
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
