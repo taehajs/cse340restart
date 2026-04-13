@@ -1,5 +1,5 @@
 const invModel = require("../models/inventoryModel");
-const utilities = require("../utilities/");
+const utilities = require("../utilities");
 
 async function buildByInvId(req, res, next) {
   try {
