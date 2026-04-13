@@ -1,5 +1,6 @@
-const invModel = require("../models/inventoryModel");
+const invModel = require("../models/inventoryModel"); 
 const utilities = require("../utilities");
+
 
 async function buildByInvId(req, res, next) {
   try {
@@ -18,6 +19,7 @@ async function buildByInvId(req, res, next) {
   }
 }
 
+
 async function buildAddClassification(req, res) {
   res.render("inventory/add-classification", {
     title: "Add Classification",
@@ -34,7 +36,7 @@ async function addClassification(req, res, next) {
   }
 }
 
-// 차량 추가
+
 async function buildAddVehicle(req, res) {
   res.render("inventory/add-vehicle", {
     title: "Add Vehicle",
@@ -50,6 +52,7 @@ async function addVehicle(req, res, next) {
     next(error);
   }
 }
+
 
 async function buildEditVehicle(req, res, next) {
   try {
@@ -73,7 +76,6 @@ async function updateVehicle(req, res, next) {
     next(error);
   }
 }
-
 
 async function buildDeleteVehicle(req, res, next) {
   try {

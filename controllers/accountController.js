@@ -1,4 +1,4 @@
-const accountModel = require("../models/account-model");
+const accountModel = require("../models/accountModel");
 const utilities = require("../utilities/");
 
 async function buildLogin(req, res) {
