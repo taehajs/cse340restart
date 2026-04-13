@@ -2,10 +2,14 @@ const express = require("express");
 const router = new express.Router();
 const accountController = require("../controllers/accountController");
 
+router.get("/login", accountController.buildLogin);
+router.post("/login", accountController.loginAccount);
+
+router.get("/register", accountController.buildRegister);
+router.post("/register", accountController.registerAccount);
+
+router.get("/logout", accountController.logoutAccount);
+
 router.get("/management", accountController.buildManagement);
-router.get("/update/:id", accountController.buildUpdateView);
-router.post("/update", accountController.updateAccountInfo);
-router.post("/update-password", accountController.updatePassword);
-router.get("/logout", accountController.logout);
 
 module.exports = router;

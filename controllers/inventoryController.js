@@ -1,153 +1,110 @@
-const inventoryModel = require("../models/inventoryModel");
-const utilities = require("../utilities");
+const invModel = require("../models/inventoryModel");
+const utilities = require("../utilities/");
 
-async function buildManagement(req, res) {
-  res.render("inventory/management", {
-    title: "Inventory Management",
-    message: req.flash("notice")
-  });
+async function buildByInvId(req, res, next) {
+  try {
+    const invId = parseInt(req.params.invId);
+    const vehicleData = await invModel.getVehicleById(invId);
+    if (!vehicleData) return next({ status: 404, message: "Vehicle not found" });
+
+    const vehicleHTML = utilities.buildVehicleDetail(vehicleData);
+    res.render("inventory/detail", {
+      title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
+      nav: await utilities.getNav(),
+      content: vehicleHTML,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 async function buildAddClassification(req, res) {
   res.render("inventory/add-classification", {
     title: "Add Classification",
-    message: req.flash("notice")
+    nav: await utilities.getNav(),
   });
 }
-
-async function addClassification(req, res) {
+async function addClassification(req, res, next) {
   try {
     const { classification_name } = req.body;
-
-    if (!utilities.checkClassificationName(classification_name)) {
-      return res.render("inventory/add-classification", {
-        title: "Add Classification",
-        classification_name,
-        errors: [{ msg: "Classification name is required." }]
-      });
-    }
-
-    const result = await inventoryModel.addClassification(classification_name.trim());
-    if (result) {
-      req.flash("notice", "Classification added successfully.");
-      res.redirect("/inventory");
-    } else {
-      req.flash("notice", "Failed to add classification.");
-      res.render("inventory/add-classification", { title: "Add Classification", classification_name });
-    }
+    await invModel.addClassification(classification_name);
+    res.redirect("/inv");
   } catch (error) {
-    console.error("Error adding classification:", error);
-    req.flash("notice", "An unexpected error occurred.");
-    res.redirect("/inventory");
+    next(error);
   }
 }
 
-async function buildAddInventory(req, res) {
-  const classificationList = await utilities.buildClassificationList();
-  res.render("inventory/add-inventory", {
-    title: "Add Inventory",
-    classificationList,
-    message: req.flash("notice")
+// 차량 추가
+async function buildAddVehicle(req, res) {
+  res.render("inventory/add-vehicle", {
+    title: "Add Vehicle",
+    nav: await utilities.getNav(),
+    classifications: await utilities.buildClassificationList(),
   });
 }
-
-async function addInventory(req, res) {
+async function addVehicle(req, res, next) {
   try {
-    const data = req.body;
-
-    if (!utilities.checkInventoryData(data)) {
-      const classificationList = await utilities.buildClassificationList(data.classification_id);
-      return res.render("inventory/add-inventory", {
-        title: "Add Inventory",
-        classificationList,
-        ...data,
-        errors: [{ msg: "All required fields must be filled." }]
-      });
-    }
-
-    const result = await inventoryModel.addInventory(data);
-    if (result) {
-      req.flash("notice", "Inventory item added successfully.");
-      res.redirect("/inventory");
-    } else {
-      req.flash("notice", "Failed to add inventory.");
-      const classificationList = await utilities.buildClassificationList(data.classification_id);
-      res.render("inventory/add-inventory", { title: "Add Inventory", classificationList, ...data });
-    }
+    await invModel.addVehicle(req.body);
+    res.redirect("/inv");
   } catch (error) {
-    console.error("Error adding inventory:", error);
-    req.flash("notice", "An unexpected error occurred.");
-    res.redirect("/inventory");
+    next(error);
   }
 }
 
-async function buildEditInventory(req, res) {
-  const invId = req.params.invId;
-  const itemData = await inventoryModel.getInventoryById(invId);
-  const classificationList = await utilities.buildClassificationList(itemData.classification_id);
-  res.render("inventory/edit-inventory", {
-    title: "Edit Inventory",
-    classificationList,
-    ...itemData,
-    message: req.flash("notice")
-  });
-}
-
-async function updateInventory(req, res) {
+async function buildEditVehicle(req, res, next) {
   try {
-    const data = req.body;
-    const result = await inventoryModel.updateInventory(data);
-    if (result) {
-      req.flash("notice", "Inventory updated successfully.");
-      res.redirect("/inventory");
-    } else {
-      req.flash("notice", "Failed to update inventory.");
-      const classificationList = await utilities.buildClassificationList(data.classification_id);
-      res.render("inventory/edit-inventory", { title: "Edit Inventory", classificationList, ...data });
-    }
+    const invId = parseInt(req.params.invId);
+    const vehicle = await invModel.getVehicleById(invId);
+    res.render("inventory/edit-vehicle", {
+      title: "Edit Vehicle",
+      nav: await utilities.getNav(),
+      vehicle,
+      classifications: await utilities.buildClassificationList(vehicle.classification_id),
+    });
   } catch (error) {
-    console.error("Error updating inventory:", error);
-    req.flash("notice", "An unexpected error occurred.");
-    res.redirect("/inventory");
+    next(error);
+  }
+}
+async function updateVehicle(req, res, next) {
+  try {
+    await invModel.updateVehicle(req.body);
+    res.redirect("/inv");
+  } catch (error) {
+    next(error);
   }
 }
 
-async function buildDeleteInventory(req, res) {
-  const invId = req.params.invId;
-  const itemData = await inventoryModel.getInventoryById(invId);
-  res.render("inventory/delete-confirm", {
-    title: "Delete Inventory",
-    ...itemData,
-    message: req.flash("notice")
-  });
-}
 
-async function deleteInventory(req, res) {
+async function buildDeleteVehicle(req, res, next) {
   try {
-    const { inv_id } = req.body;
-    const result = await inventoryModel.deleteInventory(inv_id);
-    if (result) {
-      req.flash("notice", "Inventory deleted successfully.");
-      res.redirect("/inventory");
-    } else {
-      req.flash("notice", "Failed to delete inventory.");
-      res.redirect(`/inventory/delete/${inv_id}`);
-    }
+    const invId = parseInt(req.params.invId);
+    const vehicle = await invModel.getVehicleById(invId);
+    res.render("inventory/delete-confirm", {
+      title: "Delete Vehicle",
+      nav: await utilities.getNav(),
+      vehicle,
+    });
   } catch (error) {
-    console.error("Error deleting inventory:", error);
-    req.flash("notice", "An unexpected error occurred.");
-    res.redirect("/inventory");
+    next(error);
+  }
+}
+async function deleteVehicle(req, res, next) {
+  try {
+    await invModel.deleteVehicle(req.body.inv_id);
+    res.redirect("/inv");
+  } catch (error) {
+    next(error);
   }
 }
 
 module.exports = {
-  buildManagement,
+  buildByInvId,
   buildAddClassification,
   addClassification,
-  buildAddInventory,
-  addInventory,
-  buildEditInventory,
-  updateInventory,
-  buildDeleteInventory,
-  deleteInventory
+  buildAddVehicle,
+  addVehicle,
+  buildEditVehicle,
+  updateVehicle,
+  buildDeleteVehicle,
+  deleteVehicle,
 };
