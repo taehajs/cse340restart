@@ -1,4 +1,4 @@
-const pool = require("../database");
+const pool = require("../database/db");
 
 async function getClassifications() {
   return await pool.query(
