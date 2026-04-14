@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+
+<h1>Vehicle List</h1>
+
+<ul>
+  <% if (vehicles && vehicles.length > 0) { %>
+    <% vehicles.forEach(vehicle => { %>
+      <li>
+        <a href="/inventory/detail/<%= vehicle.inv_id %>">
+          <%= vehicle.inv_make %> <%= vehicle.inv_model %>
+        </a>
+      </li>
+    <% }) %>
+  <% } else { %>
+    <p>No vehicles found.</p>
+  <% } %>
+</ul>
+
+<%- include('../partials/footer') %>
