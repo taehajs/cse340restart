@@ -3,10 +3,10 @@
 <h1>Inventory Home</h1>
 
 <ul>
-  <% classificationList.rows.forEach(item => { %>
+  <% classificationList.rows.forEach(c => { %>
     <li>
-      <a href="/inventory/type/<%= item.classification_id %>">
-        <%= item.classification_name %>
+      <a href="/inventory/type/<%= c.classification_id %>">
+        <%= c.classification_name %>
       </a>
     </li>
   <% }) %>
