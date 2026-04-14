@@ -1,13 +1,11 @@
 <h1>Inventory</h1>
 
 <ul>
-  <% if (classificationList && classificationList.rows) { %>
-    <% classificationList.rows.forEach(c => { %>
-      <li>
-        <a href="/inventory/type/<%= c.classification_id %>">
-          <%= c.classification_name %>
-        </a>
-      </li>
-    <% }) %>
-  <% } %>
+  <% classificationList.forEach(item => { %>
+  <li>
+    <a href="/inventory/type/<%= item.classification_id %>">
+      <%= item.classification_name %>
+    </a>
+  </li>
+<% }) %>
 </ul>
