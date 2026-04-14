@@ -1,0 +1,4 @@
+<%- include("header") %>
+<h1>Error</h1>
+<p><%= message %></p>
+<%- include("footer") %>
