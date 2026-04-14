@@ -1,82 +1,58 @@
 const accountModel = require("../models/accountModel");
-const utilities = require("../utilities/");
 const bcrypt = require("bcryptjs");
 
-async function buildLogin(req, res) {
-  res.render("account/login", {
-    title: "Login",
-    nav: await utilities.getNav(),
-  });
-}
-
-async function loginAccount(req, res, next) {
-  try {
-    const { email, password } = req.body;
-
-    const account = await accountModel.getAccountByEmail(email);
-
-    if (!account) {
-      req.flash("notice", "Account not found");
-      return res.redirect("/account/login");
-    }
-
-    const match = await bcrypt.compare(password, account.account_password);
-
-    if (match) {
-      req.session.account = account;
-      return res.redirect("/account/management");
-    } else {
-      req.flash("notice", "Incorrect password");
-      return res.redirect("/account/login");
-    }
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function buildRegister(req, res) {
-  res.render("account/register", {
-    title: "Register",
-    nav: await utilities.getNav(),
-  });
-}
-
-async function registerAccount(req, res, next) {
-  try {
-    const { password, ...rest } = req.body;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await accountModel.register({
-      ...rest,
-      account_password: hashedPassword,
-    });
-
-    req.flash("notice", "Account created. Please login.");
-    res.redirect("/account/login");
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function logoutAccount(req, res) {
-  req.session.destroy();
-  res.redirect("/");
-}
-
-async function buildManagement(req, res) {
+exports.buildManagement = async (req, res) => {
+  const account = await accountModel.getById(req.cookies.account_id);
   res.render("account/management", {
     title: "Account Management",
-    nav: await utilities.getNav(),
-    account: req.session.account,
+    firstName: account.first_name,
+    accountType: account.account_type,
+    account_id: account.account_id
   });
-}
+};
 
-module.exports = {
-  buildLogin,
-  loginAccount,
-  buildRegister,
-  registerAccount,
-  logoutAccount,
-  buildManagement,
+exports.buildUpdateView = async (req, res) => {
+  const account = await accountModel.getById(req.params.id);
+  res.render("account/update", { title: "Update Account", account });
+};
+
+exports.updateAccountInfo = async (req, res) => {
+  try {
+    await accountModel.updateInfo(req.body);
+    const account = await accountModel.getById(req.body.account_id);
+    res.render("account/management", {
+      title: "Account Management",
+      firstName: account.first_name,
+      accountType: account.account_type,
+      account_id: account.account_id,
+      message: "Account updated successfully."
+    });
+  } catch (err) {
+    res.render("account/update", { title: "Update Account", account: req.body, errors: [{ msg: "Update failed" }] });
+  }
+};
+
+exports.updatePassword = async (req, res) => {
+  try {
+    const hashed = await bcrypt.hash(req.body.password, 10);
+    await accountModel.updatePassword(req.body.account_id, hashed);
+    const account = await accountModel.getById(req.body.account_id);
+    res.render("account/management", {
+      title: "Account Management",
+      firstName: account.first_name,
+      accountType: account.account_type,
+      account_id: account.account_id,
+      message: "Password updated successfully."
+    });
+  } catch (err) {
+    res.render("account/update", { title: "Update Account", account: req.body, errors: [{ msg: "Password update failed" }] });
+  }
+};
+
+exports.logout = (req, res) => {
+  res.clearCookie("jwt");
+  res.clearCookie("accountType");
+  res.clearCookie("firstName");
+  res.clearCookie("account_id");
+  res.redirect("/");
 };

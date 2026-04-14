@@ -1,46 +1,25 @@
-const invModel = require("../models/inventoryModel");
+const inventoryModel = require("../models/inventoryModel");
 
-async function getNav() {
-  try {
-    const data = await invModel.getClassifications();
-
-    let nav = "<ul>";
-    nav += '<li><a href="/">Home</a></li>';
-
-    data.rows.forEach(row => {
-      nav += `<li>
-        <a href="/inventory/type/${row.classification_id}">
-          ${row.classification_name}
-        </a>
-      </li>`;
-    });
-
-    nav += "</ul>";
-    return nav;
-  } catch (err) {
-    return "<ul><li><a href='/'>Home</a></li></ul>"; // 🔥 fallback
-  }
+async function buildClassificationList(selectedId) {
+  const data = await inventoryModel.getClassifications();
+  let list = "";
+  data.forEach(row => {
+    list += `<option value="${row.classification_id}" ${row.classification_id == selectedId ? "selected" : ""}>${row.classification_name}</option>`;
+  });
+  return list;
 }
 
-async function buildClassificationList() {
-  try {
-    const data = await invModel.getClassifications();
+function checkClassificationName(name) {
+  return name && name.trim().length > 0;
+}
 
-    let list = '<select name="classification_id">';
-    data.rows.forEach(row => {
-      list += `<option value="${row.classification_id}">
-        ${row.classification_name}
-      </option>`;
-    });
-    list += "</select>";
-
-    return list;
-  } catch (err) {
-    return "<select></select>";
-  }
+function checkInventoryData(data) {
+  const requiredFields = ["inv_make", "inv_model", "inv_year", "inv_price", "inv_color", "classification_id"];
+  return requiredFields.every(field => data[field] && data[field].toString().trim() !== "");
 }
 
 module.exports = {
-  getNav,
   buildClassificationList,
+  checkClassificationName,
+  checkInventoryData
 };

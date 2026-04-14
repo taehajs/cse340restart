@@ -1,23 +1,11 @@
 const express = require("express");
-const router = express.Router();
+const router = new express.Router();
 const accountController = require("../controllers/accountController");
 
-function checkLogin(req, res, next) {
-  if (!req.session.account) {
-    req.flash("notice", "Please log in");
-    return res.redirect("/account/login");
-  }
-  next();
-}
-
-router.get("/login", accountController.buildLogin);
-router.post("/login", accountController.loginAccount);
-
-router.get("/register", accountController.buildRegister);
-router.post("/register", accountController.registerAccount);
-
-router.get("/logout", accountController.logoutAccount);
-
-router.get("/management", checkLogin, accountController.buildManagement);
+router.get("/management", accountController.buildManagement);
+router.get("/update/:id", accountController.buildUpdateView);
+router.post("/update", accountController.updateAccountInfo);
+router.post("/update-password", accountController.updatePassword);
+router.get("/logout", accountController.logout);
 
 module.exports = router;
