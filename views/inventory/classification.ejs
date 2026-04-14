@@ -1,11 +1,15 @@
 <%- nav %>
 
-<ul>
-  <% vehicles.forEach(v => { %>
-    <li>
-      <a href="/inventory/detail/<%= v.inv_id %>">
-        <%= v.inv_make %> <%= v.inv_model %>
-      </a>
-    </li>
-  <% }) %>
-</ul>
+<div class="page-container">
+  <h1>Inventory</h1>
+
+  <ul class="vehicle-list">
+    <% vehicles.forEach(v => { %>
+      <li>
+        <a href="/inventory/detail/<%= v.inv_id %>">
+          <%= v.inv_make %> <%= v.inv_model %>
+        </a>
+      </li>
+    <% }) %>
+  </ul>
+</div>
