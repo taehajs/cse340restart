@@ -1,16 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title><%= title %></title>
-</head>
-<body>
-  <h1><%= message %></h1>
-  <nav>
-    <a href="/">Home</a> | 
-    <a href="/about">About</a> | 
-    <a href="/contact">Contact</a> | 
-    <a href="/inv">Inventory Management</a>
-  </nav>
-</body>
-</html>
+<%- include("shared/header") %>
+
+<main>
+  <h2>Welcome to CSE340 Project</h2>
+
+  <section class="hero">
+    <div class="hero-text">
+      <p>This is the homepage.</p>
+
+      <a href="/inv">
+        <button>Explore Inventory</button>
+      </a>
+    </div>
+
+    <img src="/images/car.png" alt="Car Image">
+  </section>
+
+</main>
+
+<%- include("shared/footer") %>

@@ -1,26 +1,35 @@
-body {
-  font-family: Arial, sans-serif;
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+
+body {
+  font-family: Arial, sans-serif;
   background-color: #f4f4f4;
 }
 
-header, nav, main, footer {
-  padding: 1rem;
-}
 
 header {
-  background-color: #333;
+  background-color: #222;
   color: white;
+  padding: 20px;
+  text-align: center;
 }
 
+
 nav {
-  background-color: #555;
+  background-color: #333;
+  padding: 10px;
 }
 
 nav a {
   color: white;
-  margin-right: 15px;
+  margin-right: 20px;
   text-decoration: none;
   font-weight: bold;
 }
@@ -29,25 +38,38 @@ nav a:hover {
   text-decoration: underline;
 }
 
+
 main {
-  background-color: white;
+  max-width: 900px;
+  margin: 20px auto;
+  background: white;
   padding: 20px;
-  min-height: 70vh;
 }
 
-h1 {
-  color: #333;
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-a {
-  color: blue;
+.hero-text {
+  max-width: 50%;
 }
+
+.hero img {
+  max-width: 45%;
+}
+
 
 footer {
-  background-color: #333;
+  background-color: #222;
   color: white;
   text-align: center;
+  padding: 15px;
+  margin-top: 20px;
 }
+
 
 button {
   padding: 10px 15px;
@@ -59,10 +81,4 @@ button {
 
 button:hover {
   background-color: #0056b3;
-}
-
-input, select {
-  padding: 8px;
-  margin: 5px 0;
-  width: 100%;
 }
