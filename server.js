@@ -9,7 +9,6 @@ const inventoryRoute = require("./routes/inventoryRoute");
 const accountRoute = require("./routes/accountRoute");
 
 const utilities = require("./utilities");
-const pool = require("./database/db");
 
 const app = express();
 
@@ -21,10 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 
-// DB 체크 (필수 디버그)
-pool.query("SELECT NOW()")
-  .then(r => console.log("DB CONNECTED:", r.rows[0]))
-  .catch(e => console.error("DB FAIL:", e));
 
 app.use(async (req, res, next) => {
   res.locals.loggedIn = false;
@@ -32,7 +27,8 @@ app.use(async (req, res, next) => {
   try {
     res.locals.nav = await utilities.getNav();
   } catch (err) {
-    res.locals.nav = "<ul><li>Home</li></ul>";
+    console.error("NAV ERROR:", err);
+    res.locals.nav = "<ul><li><a href='/'>Home</a></li></ul>";
   }
 
   next();
@@ -42,6 +38,7 @@ app.use("/", homeRoute);
 app.use("/inventory", inventoryRoute);
 app.use("/account", accountRoute);
 
+// 404
 app.use((req, res) => {
   res.status(404).render("errors/error", {
     title: "Not Found",
@@ -50,6 +47,7 @@ app.use((req, res) => {
   });
 });
 
+// 500
 app.use((err, req, res, next) => {
   console.error("SERVER ERROR:", err);
 
@@ -61,4 +59,6 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5500;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

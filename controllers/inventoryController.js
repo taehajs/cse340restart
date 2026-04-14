@@ -1,6 +1,7 @@
 const inventoryModel = require("../models/inventoryModel");
 const utilities = require("../utilities");
 
+
 async function buildByClassificationId(req, res, next) {
   try {
     const nav = await utilities.getNav();
@@ -59,8 +60,40 @@ async function buildByInventoryId(req, res, next) {
   }
 }
 
+async function buildAddClassification(req, res, next) {
+  const nav = await utilities.getNav();
+  res.render("inventory/add-classification", { title: "Add Classification", nav });
+}
+
+async function addClassification(req, res, next) {
+  const model = require("../models/inventoryModel");
+  await model.addClassification(req.body.classification_name);
+  res.redirect("/inventory");
+}
+
+async function buildAddInventory(req, res, next) {
+  const nav = await utilities.getNav();
+  const classificationList = await utilities.buildClassificationList();
+
+  res.render("inventory/add-inventory", {
+    title: "Add Vehicle",
+    nav,
+    classificationList
+  });
+}
+
+async function addInventory(req, res, next) {
+  const model = require("../models/inventoryModel");
+  await model.addInventory(req.body);
+  res.redirect("/inventory");
+}
+
 module.exports = {
   buildByClassificationId,
   buildInventoryByClassificationId,
-  buildByInventoryId
+  buildByInventoryId,
+  buildAddClassification,
+  addClassification,
+  buildAddInventory,
+  addInventory
 };
