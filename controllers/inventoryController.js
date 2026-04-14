@@ -8,8 +8,7 @@ async function buildByClassificationId(req, res) {
   res.render("inventory/index", {
     title: "Inventory Home",
     nav,
-    classificationList,
-    errors: null
+    classificationList
   });
 }
 
@@ -22,8 +21,7 @@ async function buildInventoryByClassificationId(req, res) {
   res.render("inventory/classification", {
     title: "Vehicle List",
     nav,
-    vehicles: data.rows,
-    errors: null
+    vehicles: data.rows
   });
 }
 
@@ -38,8 +36,7 @@ async function buildByInventoryId(req, res) {
   res.render("inventory/detail", {
     title: "Vehicle Detail",
     nav,
-    vehicleHTML,
-    errors: null
+    vehicleHTML
   });
 }
 
@@ -48,22 +45,12 @@ async function buildAddClassification(req, res) {
 
   res.render("inventory/add-classification", {
     title: "Add Classification",
-    nav,
-    errors: null
+    nav
   });
 }
 
 async function addClassification(req, res) {
   const { classification_name } = req.body;
-
-  if (!classification_name) {
-    const nav = await utilities.getNav();
-    return res.render("inventory/add-classification", {
-      title: "Add Classification",
-      nav,
-      errors: [{ msg: "Classification required" }]
-    });
-  }
 
   await inventoryModel.addClassification(classification_name);
   res.redirect("/inventory");
@@ -76,27 +63,12 @@ async function buildAddInventory(req, res) {
   res.render("inventory/add-inventory", {
     title: "Add Vehicle",
     nav,
-    classificationList,
-    errors: null
+    classificationList
   });
 }
 
 async function addInventory(req, res) {
-  const data = req.body;
-
-  if (!data.inv_make || !data.inv_model) {
-    const nav = await utilities.getNav();
-    const classificationList = await utilities.buildClassificationList();
-
-    return res.render("inventory/add-inventory", {
-      title: "Add Vehicle",
-      nav,
-      classificationList,
-      errors: [{ msg: "All fields required" }]
-    });
-  }
-
-  await inventoryModel.addInventory(data);
+  await inventoryModel.addInventory(req.body);
   res.redirect("/inventory");
 }
 
@@ -114,8 +86,7 @@ async function buildEditInventory(req, res) {
     title: "Edit Vehicle",
     nav,
     classificationList,
-    vehicle: data.rows[0],
-    errors: null
+    vehicle: data.rows[0]
   });
 }
 
@@ -133,15 +104,12 @@ async function buildDeleteInventory(req, res) {
   res.render("inventory/delete-confirm", {
     title: "Delete Vehicle",
     nav,
-    vehicle: data.rows[0],
-    errors: null
+    vehicle: data.rows[0]
   });
 }
 
 async function deleteInventory(req, res) {
-  const { inv_id } = req.body;
-
-  await inventoryModel.deleteInventory(inv_id);
+  await inventoryModel.deleteInventory(req.body.inv_id);
   res.redirect("/inventory");
 }
 

@@ -1,88 +1,15 @@
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-}
-
-header {
-  background-color: #222;
-  color: white;
-  padding: 20px;
-  text-align: center;
-}
-
-nav {
-  background-color: #333;
-  padding: 10px;
-}
-
-nav a {
-  color: white;
-  margin-right: 20px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-main {
-  max-width: 900px;
-  margin: 20px auto;
-  background: white;
-  padding: 20px;
-}
-
-
-.hero {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
-
-.hero-text {
-  max-width: 50%;
-}
-
-.hero img {
-  width: 300px;
-}
-
-
-.content {
-  display: flex;
-  gap: 40px;
-  margin-top: 30px;
-}
-
-
-.upgrade-grid {
+.vehicle-detail {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
-.upgrade-grid img {
-  width: 100px;
+.vehicle-detail img {
+  width: 100%;
 }
 
-
-footer {
-  background-color: #222;
-  color: white;
-  text-align: center;
-  padding: 15px;
-  margin-top: 20px;
-}
-
-button {
-  padding: 10px;
-  background: #00aaff;
-  color: white;
-  border: none;
+@media (max-width: 768px) {
+  .vehicle-detail {
+    grid-template-columns: 1fr;
+  }
 }

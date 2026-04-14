@@ -1,6 +1,11 @@
-<h1><%= inv_make %> <%= inv_model %></h1>
-<p>Year: <%= inv_year %></p>
-<p>Price: $<%= inv_price %></p>
-<p>Color: <%= inv_color %></p>
-<p>Description: <%= inv_description %></p>
-<img src="<%= inv_image %>" alt="<%= inv_make %> <%= inv_model %>">
+<h1><%= vehicle.inv_make %> <%= vehicle.inv_model %></h1>
+
+<p>Year: <%= vehicle.inv_year %></p>
+
+<p>Price: $<%= Number(vehicle.inv_price).toLocaleString("en-US") %></p>
+
+<p>Color: <%= vehicle.inv_color %></p>
+
+<p>Description: <%= vehicle.inv_description %></p>
+
+<img src="<%= vehicle.inv_image %>" alt="<%= vehicle.inv_make %> <%= vehicle.inv_model %>">

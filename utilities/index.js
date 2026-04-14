@@ -43,7 +43,7 @@ function buildVehicleDetail(vehicle) {
   return `
     <div class="vehicle-detail">
       <h1>${vehicle.inv_make} ${vehicle.inv_model}</h1>
-      <img src="${vehicle.inv_image}" />
+      <img src="${vehicle.inv_image}">
       <p>${vehicle.inv_year}</p>
       <p>$${Number(vehicle.inv_price).toLocaleString("en-US")}</p>
       <p>${Number(vehicle.inv_miles).toLocaleString("en-US")}</p>
