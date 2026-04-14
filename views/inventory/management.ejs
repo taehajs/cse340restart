@@ -1,21 +1,27 @@
 <%- include("../shared/header") %>
-<h1><%= title %></h1>
-<table>
+
+<h1>Inventory Management</h1>
+
+<table border="1">
   <tr>
-    <th>ID</th><th>Make</th><th>Model</th><th>Year</th><th>Price</th><th>Action</th>
+    <th>ID</th><th>Make</th><th>Model</th><th>Year</th><th>Price</th>
   </tr>
-  <% items.forEach(item => { %>
+
+  <% if (items && items.length > 0) { %>
+    <% items.forEach(item => { %>
+      <tr>
+        <td><%= item.inv_id %></td>
+        <td><%= item.inv_make %></td>
+        <td><%= item.inv_model %></td>
+        <td><%= item.inv_year %></td>
+        <td><%= item.inv_price %></td>
+      </tr>
+    <% }) %>
+  <% } else { %>
     <tr>
-      <td><%= item.inv_id %></td>
-      <td><%= item.inv_make %></td>
-      <td><%= item.inv_model %></td>
-      <td><%= item.inv_year %></td>
-      <td><%= item.inv_price %></td>
-      <td>
-        <a href="/inventory/edit/<%= item.inv_id %>">Edit</a> |
-        <a href="/inventory/delete/<%= item.inv_id %>">Delete</a>
-      </td>
+      <td colspan="5">No inventory</td>
     </tr>
-  <% }) %>
+  <% } %>
 </table>
+
 <%- include("../shared/footer") %>

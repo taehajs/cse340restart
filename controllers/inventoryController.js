@@ -1,24 +1,25 @@
 const invModel = require("../models/inventoryModel");
 const utilities = require("../utilities");
 
-async function buildByInvId(req, res, next) {
-  try {
-    const invId = parseInt(req.params.inv_id);
+async function buildManagement(req, res) {
+  const data = await invModel.getAllInventory();
 
-    const vehicleData = await invModel.getVehicleById(invId);
+  res.render("inventory/management", {
+    title: "Inventory Management",
+    nav: await utilities.getNav(),
+    items: data.rows,
+  });
+}
 
-    if (!vehicleData) {
-      return next({ status: 404, message: "Vehicle not found" });
-    }
+async function buildByInvId(req, res) {
+  const invId = parseInt(req.params.inv_id);
+  const vehicle = await invModel.getVehicleById(invId);
 
-    res.render("inventory/detail", {
-      title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
-      nav: await utilities.getNav(),
-      vehicle: vehicleData,
-    });
-  } catch (error) {
-    next(error);
-  }
+  res.render("inventory/detail", {
+    title: "Vehicle Detail",
+    nav: await utilities.getNav(),
+    vehicle,
+  });
 }
 
 async function buildAddClassification(req, res) {
@@ -47,6 +48,7 @@ async function addVehicle(req, res) {
 }
 
 module.exports = {
+  buildManagement,
   buildByInvId,
   buildAddClassification,
   addClassification,

@@ -2,9 +2,7 @@ const express = require("express");
 const router = express.Router();
 const invController = require("../controllers/inventoryController");
 
-router.get("/", (req, res) => {
-  res.render("inventory/management", { title: "Inventory Management" });
-});
+router.get("/", invController.buildManagement);
 
 router.get("/detail/:inv_id", invController.buildByInvId);
 
