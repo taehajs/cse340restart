@@ -6,14 +6,12 @@ async function getClassifications() {
   );
 }
 
-
 async function getInventoryByClassificationId(classificationId) {
   return await pool.query(
     "SELECT * FROM inventory WHERE classification_id = $1",
     [classificationId]
   );
 }
-
 
 async function getInventoryById(invId) {
   return await pool.query(
@@ -22,14 +20,12 @@ async function getInventoryById(invId) {
   );
 }
 
-
 async function addClassification(name) {
   return await pool.query(
     "INSERT INTO classification (classification_name) VALUES ($1)",
     [name]
   );
 }
-
 
 async function addInventory(data) {
   return await pool.query(
@@ -54,7 +50,6 @@ async function addInventory(data) {
   );
 }
 
-
 async function updateInventory(data) {
   return await pool.query(
     `UPDATE inventory SET
@@ -72,7 +67,6 @@ async function updateInventory(data) {
     ]
   );
 }
-
 
 async function deleteInventory(invId) {
   return await pool.query(

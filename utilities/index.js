@@ -1,25 +1,60 @@
-const inventoryModel = require("../models/inventoryModel");
+const pool = require("../database");
 
-async function buildClassificationList(selectedId) {
-  const data = await inventoryModel.getClassifications();
-  let list = "";
-  data.forEach(row => {
-    list += `<option value="${row.classification_id}" ${row.classification_id == selectedId ? "selected" : ""}>${row.classification_name}</option>`;
+async function getNav() {
+  const data = await pool.query(
+    "SELECT * FROM classification ORDER BY classification_name"
+  );
+
+  let nav = "<ul>";
+  nav += '<li><a href="/inventory/">Home</a></li>';
+
+  data.rows.forEach(row => {
+    nav += `<li><a href="/inventory/type/${row.classification_id}">
+      ${row.classification_name}
+    </a></li>`;
   });
+
+  nav += "</ul>";
+
+  return nav;
+}
+
+async function buildClassificationList(selectedId = null) {
+  const data = await pool.query(
+    "SELECT * FROM classification ORDER BY classification_name"
+  );
+
+  let list = `<select name="classification_id" required>`;
+  list += `<option value="">Choose Classification</option>`;
+
+  data.rows.forEach(row => {
+    list += `<option value="${row.classification_id}"
+      ${selectedId == row.classification_id ? "selected" : ""}>
+      ${row.classification_name}
+    </option>`;
+  });
+
+  list += `</select>`;
+
   return list;
 }
 
-function checkClassificationName(name) {
-  return name && name.trim().length > 0;
-}
-
-function checkInventoryData(data) {
-  const requiredFields = ["inv_make", "inv_model", "inv_year", "inv_price", "inv_color", "classification_id"];
-  return requiredFields.every(field => data[field] && data[field].toString().trim() !== "");
+function buildVehicleDetail(vehicle) {
+  return `
+    <div class="vehicle-detail">
+      <h1>${vehicle.inv_make} ${vehicle.inv_model}</h1>
+      <img src="${vehicle.inv_image}" />
+      <p>${vehicle.inv_year}</p>
+      <p>$${Number(vehicle.inv_price).toLocaleString("en-US")}</p>
+      <p>${Number(vehicle.inv_miles).toLocaleString("en-US")}</p>
+      <p>${vehicle.inv_color}</p>
+      <p>${vehicle.inv_description}</p>
+    </div>
+  `;
 }
 
 module.exports = {
+  getNav,
   buildClassificationList,
-  checkClassificationName,
-  checkInventoryData
+  buildVehicleDetail
 };

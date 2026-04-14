@@ -20,13 +20,12 @@ async function buildInventoryByClassificationId(req, res) {
   const data = await inventoryModel.getInventoryByClassificationId(classificationId);
 
   res.render("inventory/classification", {
-    title: "Vehicles",
+    title: "Vehicle List",
     nav,
     vehicles: data.rows,
     errors: null
   });
 }
-
 
 async function buildByInventoryId(req, res) {
   const invId = req.params.invId;
@@ -34,14 +33,15 @@ async function buildByInventoryId(req, res) {
   const nav = await utilities.getNav();
   const data = await inventoryModel.getInventoryById(invId);
 
+  const vehicleHTML = utilities.buildVehicleDetail(data.rows[0]);
+
   res.render("inventory/detail", {
     title: "Vehicle Detail",
     nav,
-    vehicle: data.rows[0],
+    vehicleHTML,
     errors: null
   });
 }
-
 
 async function buildAddClassification(req, res) {
   const nav = await utilities.getNav();
@@ -58,11 +58,10 @@ async function addClassification(req, res) {
 
   if (!classification_name) {
     const nav = await utilities.getNav();
-
     return res.render("inventory/add-classification", {
       title: "Add Classification",
       nav,
-      errors: [{ msg: "Classification name is required" }]
+      errors: [{ msg: "Classification required" }]
     });
   }
 
@@ -93,7 +92,7 @@ async function addInventory(req, res) {
       title: "Add Vehicle",
       nav,
       classificationList,
-      errors: [{ msg: "All fields are required" }]
+      errors: [{ msg: "All fields required" }]
     });
   }
 
@@ -101,12 +100,12 @@ async function addInventory(req, res) {
   res.redirect("/inventory");
 }
 
-
 async function buildEditInventory(req, res) {
   const invId = req.params.invId;
 
   const nav = await utilities.getNav();
   const data = await inventoryModel.getInventoryById(invId);
+
   const classificationList = await utilities.buildClassificationList(
     data.rows[0].classification_id
   );
@@ -124,7 +123,6 @@ async function updateInventory(req, res) {
   await inventoryModel.updateInventory(req.body);
   res.redirect("/inventory");
 }
-
 
 async function buildDeleteInventory(req, res) {
   const invId = req.params.invId;
