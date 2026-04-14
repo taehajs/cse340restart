@@ -1,6 +1,7 @@
 const inventoryModel = require("../models/inventoryModel");
 const utilities = require("../utilities");
 
+
 async function buildByClassificationId(req, res, next) {
   try {
     const nav = await utilities.getNav();
@@ -9,14 +10,13 @@ async function buildByClassificationId(req, res, next) {
     res.render("inventory/index", {
       title: "Inventory Home",
       nav,
-      classificationList
+      classificationList: classificationList.rows
     });
 
   } catch (err) {
     next(err);
   }
 }
-
 
 async function buildInventoryByClassificationId(req, res, next) {
   try {
@@ -36,15 +36,14 @@ async function buildInventoryByClassificationId(req, res, next) {
   }
 }
 
-
 async function buildByInventoryId(req, res, next) {
   try {
     const invId = req.params.invId;
 
     const nav = await utilities.getNav();
-    const data = await inventoryModel.getInventoryById(invId);
+    const result = await inventoryModel.getInventoryById(invId);
 
-    if (!data.rows || data.rows.length === 0) {
+    if (!result.rows.length) {
       return res.status(404).render("errors/error", {
         title: "Not Found",
         message: "Vehicle not found",
@@ -52,7 +51,7 @@ async function buildByInventoryId(req, res, next) {
       });
     }
 
-    const vehicle = data.rows[0];
+    const vehicle = result.rows[0];
     const vehicleHTML = utilities.buildVehicleDetail(vehicle);
 
     res.render("inventory/detail", {
@@ -124,6 +123,10 @@ async function buildEditInventory(req, res, next) {
     const nav = await utilities.getNav();
     const data = await inventoryModel.getInventoryById(invId);
 
+    if (!data.rows.length) {
+      return next(new Error("Vehicle not found"));
+    }
+
     const classificationList = await utilities.buildClassificationList(
       data.rows[0].classification_id
     );
@@ -139,6 +142,8 @@ async function buildEditInventory(req, res, next) {
     next(err);
   }
 }
+
+
 
 async function updateInventory(req, res, next) {
   try {
@@ -156,6 +161,10 @@ async function buildDeleteInventory(req, res, next) {
 
     const nav = await utilities.getNav();
     const data = await inventoryModel.getInventoryById(invId);
+
+    if (!data.rows.length) {
+      return next(new Error("Vehicle not found"));
+    }
 
     res.render("inventory/delete-confirm", {
       title: "Delete Vehicle",

@@ -12,14 +12,15 @@ const utilities = require("./utilities");
 
 const app = express();
 
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
-
 
 app.use(async (req, res, next) => {
   res.locals.loggedIn = false;
@@ -27,7 +28,9 @@ app.use(async (req, res, next) => {
   try {
     res.locals.nav = await utilities.getNav();
   } catch (err) {
-    console.error("NAV MIDDLEWARE ERROR:", err);
+    console.error("NAV ERROR:", err);
+
+    // DB 터져도 사이트 안 죽게 fallback nav
     res.locals.nav = `
       <ul>
         <li><a href="/">Home</a></li>
@@ -45,7 +48,6 @@ app.use("/", homeRoute);
 app.use("/inventory", inventoryRoute);
 app.use("/account", accountRoute);
 
-
 app.get("/trigger-error", (req, res, next) => {
   next(new Error("Intentional 500 Error"));
 });
@@ -59,9 +61,6 @@ app.use((req, res) => {
   });
 });
 
-
- * 500 ERROR
- */
 app.use((err, req, res, next) => {
   console.error("SERVER ERROR:", err);
 
@@ -73,8 +72,9 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5500;
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-console.log("DB CHECK:", process.env.DATABASE_URL);
+console.log("DB URL EXISTS:", !!process.env.DATABASE_URL);
