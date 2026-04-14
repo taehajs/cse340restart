@@ -15,32 +15,32 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
 app.use(express.static(path.join(__dirname, "public")));
+
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-  res.locals.loggedIn = req.cookies.jwt ? true : false;
-  res.locals.accountType = req.cookies.accountType || null;
-  res.locals.firstName = req.cookies.firstName || null;
+  res.locals.loggedIn = false;
   next();
 });
 
-
+// routes
 app.use("/", homeRoute);
 app.use("/inventory", inventoryRoute);
 app.use("/account", accountRoute);
 
-
+// 404
 app.use((req, res) => {
-  res.status(404).render("shared/404", { title: "Page Not Found" });
+  res.status(404).render("shared/404", { title: "Not Found" });
 });
 
-
+// error
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).render("shared/500", { title: "Server Error" });
+  console.error(err);
+  res.status(500).render("shared/500", { title: "Error" });
 });
-
 
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

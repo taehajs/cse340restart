@@ -7,21 +7,19 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: Arial;
+  background: #f4f4f4;
 }
 
-
 header {
-  background-color: #222;
+  background: #222;
   color: white;
   padding: 20px;
   text-align: center;
 }
 
-
 nav {
-  background-color: #333;
+  background: #333;
   padding: 10px;
 }
 
@@ -29,66 +27,29 @@ nav a {
   color: white;
   margin-right: 20px;
   text-decoration: none;
-  font-weight: bold;
 }
-
-nav a:hover {
-  text-decoration: underline;
-}
-
 
 main {
   max-width: 1000px;
   margin: 30px auto;
   background: white;
   padding: 30px;
-  border-radius: 10px;
 }
-
 
 .hero {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
-}
-
-.hero-text {
-  max-width: 45%;
-}
-
-.hero-text ul {
-  margin-left: 20px;
-  margin-bottom: 10px;
 }
 
 .hero img {
   width: 400px;
 }
 
-
-button {
-  padding: 10px 20px;
-  background: #00aaff;
-  color: white;
-  border: none;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #0077cc;
-}
-
 .content {
   display: flex;
   justify-content: space-between;
   margin-top: 40px;
-}
-
-.upgrades {
-  width: 50%;
 }
 
 .upgrade-grid {
@@ -98,39 +59,27 @@ button:hover {
 }
 
 .upgrade-grid div {
-  background-color: #007BFF;
+  background: #007BFF;
   padding: 15px;
-  border-radius: 8px;
   text-align: center;
 }
 
 .upgrade-grid img {
   width: 80px;
   background: white;
-  padding: 5px;
-  border-radius: 5px;
 }
 
 .upgrade-grid p {
   color: white;
-  margin-top: 10px;
 }
 
-/* REVIEWS */
 .reviews {
   width: 40%;
 }
 
-.reviews ul {
-  padding-left: 20px;
-  line-height: 2;
-}
-
-
 footer {
-  background-color: #222;
+  background: #222;
   color: white;
   text-align: center;
   padding: 15px;
-  margin-top: 20px;
 }
