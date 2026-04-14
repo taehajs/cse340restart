@@ -20,19 +20,36 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 
+
 app.use(async (req, res, next) => {
   res.locals.loggedIn = false;
-  res.locals.nav = await utilities.getNav();
+
+  try {
+    res.locals.nav = await utilities.getNav();
+  } catch (err) {
+    console.error("NAV MIDDLEWARE ERROR:", err);
+    res.locals.nav = `
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/inventory">Inventory</a></li>
+        <li><a href="/account/login">My Account</a></li>
+      </ul>
+    `;
+  }
+
   next();
 });
+
 
 app.use("/", homeRoute);
 app.use("/inventory", inventoryRoute);
 app.use("/account", accountRoute);
 
+
 app.get("/trigger-error", (req, res, next) => {
   next(new Error("Intentional 500 Error"));
 });
+
 
 app.use((req, res) => {
   res.status(404).render("errors/error", {
@@ -42,8 +59,11 @@ app.use((req, res) => {
   });
 });
 
+
+ * 500 ERROR
+ */
 app.use((err, req, res, next) => {
-  console.error(err);
+  console.error("SERVER ERROR:", err);
 
   res.status(500).render("errors/error", {
     title: "Server Error",
@@ -53,4 +73,8 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5500;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+console.log("DB CHECK:", process.env.DATABASE_URL);
