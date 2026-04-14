@@ -1,27 +1,34 @@
+main {
+  max-width: 1000px;
+  margin: auto;
+}
+
 
 .hero {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 40px;
+  margin-top: 20px;
 }
 
 .hero-text {
-  max-width: 50%;
+  max-width: 45%;
 }
 
 .hero img {
   width: 400px;
 }
 
-
 .content {
   display: flex;
   justify-content: space-between;
-  gap: 40px;
   margin-top: 40px;
 }
 
+
+.upgrades {
+  width: 50%;
+}
 
 .upgrade-grid {
   display: grid;
@@ -38,10 +45,11 @@
 }
 
 
-.content section:last-child {
-  max-width: 40%;
+.reviews {
+  width: 40%;
 }
 
-.content ul {
+.reviews ul {
   padding-left: 20px;
+  line-height: 1.8;
 }
