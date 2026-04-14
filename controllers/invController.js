@@ -1,14 +1,19 @@
-const invModel = require("../models/inventoryModel"); 
+const invModel = require("../models/inventoryModel");
 const utilities = require("../utilities");
 
 
 async function buildByInvId(req, res, next) {
   try {
-    const invId = parseInt(req.params.invId);
+    const invId = parseInt(req.params.inv_id);
+
     const vehicleData = await invModel.getVehicleById(invId);
-    if (!vehicleData) return next({ status: 404, message: "Vehicle not found" });
+
+    if (!vehicleData) {
+      return next({ status: 404, message: "Vehicle not found" });
+    }
 
     const vehicleHTML = utilities.buildVehicleDetail(vehicleData);
+
     res.render("inventory/detail", {
       title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
       nav: await utilities.getNav(),
@@ -26,11 +31,15 @@ async function buildAddClassification(req, res) {
     nav: await utilities.getNav(),
   });
 }
+
 async function addClassification(req, res, next) {
   try {
     const { classification_name } = req.body;
+
     await invModel.addClassification(classification_name);
-    res.redirect("/inv");
+
+    req.flash("notice", "Classification added");
+    res.redirect("/inv/management");
   } catch (error) {
     next(error);
   }
@@ -44,10 +53,13 @@ async function buildAddVehicle(req, res) {
     classifications: await utilities.buildClassificationList(),
   });
 }
+
 async function addVehicle(req, res, next) {
   try {
     await invModel.addVehicle(req.body);
-    res.redirect("/inv");
+
+    req.flash("notice", "Vehicle added");
+    res.redirect("/inv/management");
   } catch (error) {
     next(error);
   }
@@ -56,31 +68,41 @@ async function addVehicle(req, res, next) {
 
 async function buildEditVehicle(req, res, next) {
   try {
-    const invId = parseInt(req.params.invId);
+    const invId = parseInt(req.params.inv_id);
+
     const vehicle = await invModel.getVehicleById(invId);
+
     res.render("inventory/edit-vehicle", {
       title: "Edit Vehicle",
       nav: await utilities.getNav(),
       vehicle,
-      classifications: await utilities.buildClassificationList(vehicle.classification_id),
+      classifications: await utilities.buildClassificationList(
+        vehicle.classification_id
+      ),
     });
   } catch (error) {
     next(error);
   }
 }
+
 async function updateVehicle(req, res, next) {
   try {
     await invModel.updateVehicle(req.body);
-    res.redirect("/inv");
+
+    req.flash("notice", "Vehicle updated");
+    res.redirect("/inv/management");
   } catch (error) {
     next(error);
   }
 }
 
+
 async function buildDeleteVehicle(req, res, next) {
   try {
-    const invId = parseInt(req.params.invId);
+    const invId = parseInt(req.params.inv_id);
+
     const vehicle = await invModel.getVehicleById(invId);
+
     res.render("inventory/delete-confirm", {
       title: "Delete Vehicle",
       nav: await utilities.getNav(),
@@ -90,10 +112,13 @@ async function buildDeleteVehicle(req, res, next) {
     next(error);
   }
 }
+
 async function deleteVehicle(req, res, next) {
   try {
     await invModel.deleteVehicle(req.body.inv_id);
-    res.redirect("/inv");
+
+    req.flash("notice", "Vehicle deleted");
+    res.redirect("/inv/management");
   } catch (error) {
     next(error);
   }

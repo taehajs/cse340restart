@@ -1,22 +1,19 @@
 const express = require("express");
-const router = new express.Router();
-const invController = require("../controllers/invController");
+const router = express.Router();
+const invController = require("../controllers/inventoryController");
 
-router.get("/", invController.buildManagement);
-
+router.get("/detail/:inv_id", invController.buildByInvId);
 
 router.get("/add-classification", invController.buildAddClassification);
 router.post("/add-classification", invController.addClassification);
 
+router.get("/add-vehicle", invController.buildAddVehicle);
+router.post("/add-vehicle", invController.addVehicle);
 
-router.get("/add-inventory", invController.buildAddInventory);
-router.post("/add-inventory", invController.addInventory);
+router.get("/edit/:inv_id", invController.buildEditVehicle);
+router.post("/update", invController.updateVehicle);
 
-router.get("/edit/:invId", invController.buildEditInventory);
-router.post("/update", invController.updateInventory);
-
-
-router.get("/delete/:invId", invController.buildDeleteInventory);
-router.post("/delete", invController.deleteInventory);
+router.get("/delete/:inv_id", invController.buildDeleteVehicle);
+router.post("/delete", invController.deleteVehicle);
 
 module.exports = router;

@@ -1,25 +1,58 @@
 const accountModel = require("../models/accountModel");
 const utilities = require("../utilities/");
+const bcrypt = require("bcryptjs");
 
 async function buildLogin(req, res) {
-  res.render("account/login", { title: "Login", nav: await utilities.getNav() });
+  res.render("account/login", {
+    title: "Login",
+    nav: await utilities.getNav(),
+  });
 }
+
 async function loginAccount(req, res, next) {
   try {
-    const account = await accountModel.login(req.body);
-    req.session.account = account;
-    res.redirect("/account/management");
+    const { email, password } = req.body;
+
+    const account = await accountModel.getAccountByEmail(email);
+
+    if (!account) {
+      req.flash("notice", "Account not found");
+      return res.redirect("/account/login");
+    }
+
+    const match = await bcrypt.compare(password, account.account_password);
+
+    if (match) {
+      req.session.account = account;
+      return res.redirect("/account/management");
+    } else {
+      req.flash("notice", "Incorrect password");
+      return res.redirect("/account/login");
+    }
   } catch (error) {
     next(error);
   }
 }
 
 async function buildRegister(req, res) {
-  res.render("account/register", { title: "Register", nav: await utilities.getNav() });
+  res.render("account/register", {
+    title: "Register",
+    nav: await utilities.getNav(),
+  });
 }
+
 async function registerAccount(req, res, next) {
   try {
-    await accountModel.register(req.body);
+    const { password, ...rest } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await accountModel.register({
+      ...rest,
+      account_password: hashedPassword,
+    });
+
+    req.flash("notice", "Account created. Please login.");
     res.redirect("/account/login");
   } catch (error) {
     next(error);
