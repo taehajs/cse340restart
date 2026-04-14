@@ -1,13 +1,12 @@
 const inventoryModel = require("../models/inventoryModel");
 const utilities = require("../utilities");
 
-
 async function buildByClassificationId(req, res) {
   const nav = await utilities.getNav();
   const classificationList = await inventoryModel.getClassifications();
 
   res.render("inventory/index", {
-    title: "Inventory",
+    title: "Inventory Home",
     nav,
     classificationList,
     errors: null
@@ -17,11 +16,11 @@ async function buildByClassificationId(req, res) {
 async function buildInventoryByClassificationId(req, res) {
   const classificationId = req.params.classificationId;
 
-  const data = await inventoryModel.getInventoryByClassificationId(classificationId);
   const nav = await utilities.getNav();
+  const data = await inventoryModel.getInventoryByClassificationId(classificationId);
 
   res.render("inventory/classification", {
-    title: "Inventory List",
+    title: "Vehicles",
     nav,
     vehicles: data.rows,
     errors: null
@@ -32,8 +31,8 @@ async function buildInventoryByClassificationId(req, res) {
 async function buildByInventoryId(req, res) {
   const invId = req.params.invId;
 
-  const data = await inventoryModel.getInventoryById(invId);
   const nav = await utilities.getNav();
+  const data = await inventoryModel.getInventoryById(invId);
 
   res.render("inventory/detail", {
     title: "Vehicle Detail",
@@ -42,6 +41,7 @@ async function buildByInventoryId(req, res) {
     errors: null
   });
 }
+
 
 async function buildAddClassification(req, res) {
   const nav = await utilities.getNav();
@@ -58,10 +58,11 @@ async function addClassification(req, res) {
 
   if (!classification_name) {
     const nav = await utilities.getNav();
+
     return res.render("inventory/add-classification", {
       title: "Add Classification",
       nav,
-      errors: [{ msg: "Classification name required" }]
+      errors: [{ msg: "Classification name is required" }]
     });
   }
 
@@ -69,13 +70,12 @@ async function addClassification(req, res) {
   res.redirect("/inventory");
 }
 
-
 async function buildAddInventory(req, res) {
   const nav = await utilities.getNav();
   const classificationList = await utilities.buildClassificationList();
 
   res.render("inventory/add-inventory", {
-    title: "Add Inventory",
+    title: "Add Vehicle",
     nav,
     classificationList,
     errors: null
@@ -90,10 +90,10 @@ async function addInventory(req, res) {
     const classificationList = await utilities.buildClassificationList();
 
     return res.render("inventory/add-inventory", {
-      title: "Add Inventory",
+      title: "Add Vehicle",
       nav,
       classificationList,
-      errors: [{ msg: "All fields required" }]
+      errors: [{ msg: "All fields are required" }]
     });
   }
 
@@ -105,12 +105,14 @@ async function addInventory(req, res) {
 async function buildEditInventory(req, res) {
   const invId = req.params.invId;
 
-  const data = await inventoryModel.getInventoryById(invId);
   const nav = await utilities.getNav();
-  const classificationList = await utilities.buildClassificationList(data.rows[0].classification_id);
+  const data = await inventoryModel.getInventoryById(invId);
+  const classificationList = await utilities.buildClassificationList(
+    data.rows[0].classification_id
+  );
 
   res.render("inventory/edit-inventory", {
-    title: "Edit Inventory",
+    title: "Edit Vehicle",
     nav,
     classificationList,
     vehicle: data.rows[0],
@@ -127,8 +129,8 @@ async function updateInventory(req, res) {
 async function buildDeleteInventory(req, res) {
   const invId = req.params.invId;
 
-  const data = await inventoryModel.getInventoryById(invId);
   const nav = await utilities.getNav();
+  const data = await inventoryModel.getInventoryById(invId);
 
   res.render("inventory/delete-confirm", {
     title: "Delete Vehicle",
