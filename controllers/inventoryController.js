@@ -31,7 +31,8 @@ async function buildByInventoryId(req, res) {
   const nav = await utilities.getNav();
   const data = await inventoryModel.getInventoryById(invId);
 
-  const vehicleHTML = utilities.buildVehicleDetail(data.rows[0]);
+  const vehicle = data.rows[0];
+  const vehicleHTML = utilities.buildVehicleDetail(vehicle);
 
   res.render("inventory/detail", {
     title: "Vehicle Detail",
@@ -50,9 +51,7 @@ async function buildAddClassification(req, res) {
 }
 
 async function addClassification(req, res) {
-  const { classification_name } = req.body;
-
-  await inventoryModel.addClassification(classification_name);
+  await inventoryModel.addClassification(req.body.classification_name);
   res.redirect("/inventory");
 }
 

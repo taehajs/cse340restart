@@ -1,0 +1,11 @@
+<%- nav %>
+
+<ul>
+  <% vehicles.forEach(v => { %>
+    <li>
+      <a href="/inventory/detail/<%= v.inv_id %>">
+        <%= v.inv_make %> <%= v.inv_model %>
+      </a>
+    </li>
+  <% }) %>
+</ul>
