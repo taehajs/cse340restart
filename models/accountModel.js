@@ -1,5 +1,5 @@
 const pool = require("../database/");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 async function register({ account_firstname, account_lastname, account_email, account_password }) {
   const hashedPassword = await bcrypt.hash(account_password, 10);
