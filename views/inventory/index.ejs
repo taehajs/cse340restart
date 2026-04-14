@@ -1,15 +1,13 @@
-<%- include('../shared/header') %>
-
-<h1>Inventory Home</h1>
+<h1>Inventory</h1>
 
 <ul>
-  <% classificationList.rows.forEach(c => { %>
-    <li>
-      <a href="/inventory/type/<%= c.classification_id %>">
-        <%= c.classification_name %>
-      </a>
-    </li>
-  <% }) %>
+  <% if (classificationList && classificationList.rows) { %>
+    <% classificationList.rows.forEach(c => { %>
+      <li>
+        <a href="/inventory/type/<%= c.classification_id %>">
+          <%= c.classification_name %>
+        </a>
+      </li>
+    <% }) %>
+  <% } %>
 </ul>
-
-<%- include('../shared/footer') %>
