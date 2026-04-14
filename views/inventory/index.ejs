@@ -1,0 +1,15 @@
+<%- include('../shared/header') %>
+
+<h1>Inventory Home</h1>
+
+<ul>
+  <% classificationList.rows.forEach(item => { %>
+    <li>
+      <a href="/inventory/type/<%= item.classification_id %>">
+        <%= item.classification_name %>
+      </a>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('../shared/footer') %>
