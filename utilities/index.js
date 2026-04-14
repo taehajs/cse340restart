@@ -22,23 +22,28 @@ async function getNav() {
   }
 }
 
-async function buildClassificationList(selectedId = null) {
-  const data = await pool.query(
-    "SELECT * FROM classification ORDER BY classification_name"
-  );
+async function getNav() {
+  try {
+    const data = await pool.query(
+      "SELECT * FROM classification ORDER BY classification_name"
+    );
 
-  let list = `<select name="classification_id" required>`;
-  list += `<option value="">Choose Classification</option>`;
+    let nav = "<ul>";
+    nav += "<li><a href='/inventory'>Home</a></li>";
 
-  data.rows.forEach(row => {
-    list += `<option value="${row.classification_id}"
-      ${selectedId == row.classification_id ? "selected" : ""}>
-      ${row.classification_name}
-    </option>`;
-  });
+    data.rows.forEach(row => {
+      nav += `<li><a href="/inventory/type/${row.classification_id}">
+        ${row.classification_name}
+      </a></li>`;
+    });
 
-  list += `</select>`;
-  return list;
+    nav += "</ul>";
+    return nav;
+
+  } catch (err) {
+    console.error("NAV ERROR:", err);
+    return "<ul><li><a href='/inventory'>Home</a></li></ul>";
+  }
 }
 
 function buildVehicleDetail(vehicle) {
