@@ -1,13 +1,10 @@
-<%- include("../shared/header") %>
+<%- include('../partials/header') %>
+
 <h1>Account Management</h1>
-<p>Welcome, <%= firstName %>!</p>
-<p>Account Type: <%= accountType %></p>
-<nav>
-  <a href="/account/update/<%= account_id %>">Update Account</a> |
-  <a href="/inventory">Inventory Management</a> |
-  <a href="/account/logout">Logout</a>
-</nav>
-<% if (typeof message !== "undefined") { %>
-  <p><%= message %></p>
-<% } %>
-<%- include("../shared/footer") %>
+
+<ul>
+  <li><a href="/account/login">Login</a></li>
+  <li><a href="/account/register">Register</a></li>
+</ul>
+
+<%- include('../partials/footer') %>
