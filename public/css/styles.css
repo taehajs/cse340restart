@@ -1,47 +1,9 @@
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-}
-
-header {
-  background-color: #222;
-  color: white;
-  padding: 20px;
-  text-align: center;
-}
-
-nav {
-  background-color: #333;
-  padding: 10px;
-}
-
-nav a {
-  color: white;
-  margin-right: 20px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-main {
-  max-width: 900px;
-  margin: 20px auto;
-  background: white;
-  padding: 20px;
-}
 
 .hero {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  gap: 40px;
 }
 
 .hero-text {
@@ -49,14 +11,15 @@ main {
 }
 
 .hero img {
-  width: 300px;
+  width: 400px;
 }
 
 
 .content {
   display: flex;
+  justify-content: space-between;
   gap: 40px;
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 
@@ -66,22 +29,19 @@ main {
   gap: 20px;
 }
 
+.upgrade-grid div {
+  text-align: center;
+}
+
 .upgrade-grid img {
   width: 100px;
 }
 
 
-footer {
-  background-color: #222;
-  color: white;
-  text-align: center;
-  padding: 15px;
-  margin-top: 20px;
+.content section:last-child {
+  max-width: 40%;
 }
 
-button {
-  padding: 10px;
-  background: #00aaff;
-  color: white;
-  border: none;
+.content ul {
+  padding-left: 20px;
 }
