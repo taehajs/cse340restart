@@ -7,19 +7,19 @@
 }
 
 body {
-  font-family: Arial;
-  background: #f4f4f4;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
 }
 
 header {
-  background: #222;
+  background-color: #222;
   color: white;
   padding: 20px;
   text-align: center;
 }
 
 nav {
-  background: #333;
+  background-color: #333;
   padding: 10px;
 }
 
@@ -27,30 +27,39 @@ nav a {
   color: white;
   margin-right: 20px;
   text-decoration: none;
+  font-weight: bold;
 }
 
 main {
-  max-width: 1000px;
-  margin: 30px auto;
+  max-width: 900px;
+  margin: 20px auto;
   background: white;
-  padding: 30px;
+  padding: 20px;
 }
+
 
 .hero {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
+}
+
+.hero-text {
+  max-width: 50%;
 }
 
 .hero img {
-  width: 400px;
+  width: 300px;
 }
+
 
 .content {
   display: flex;
-  justify-content: space-between;
-  margin-top: 40px;
+  gap: 40px;
+  margin-top: 30px;
 }
+
 
 .upgrade-grid {
   display: grid;
@@ -58,28 +67,22 @@ main {
   gap: 20px;
 }
 
-.upgrade-grid div {
-  background: #007BFF;
-  padding: 15px;
-  text-align: center;
-}
-
 .upgrade-grid img {
-  width: 80px;
-  background: white;
+  width: 100px;
 }
 
-.upgrade-grid p {
-  color: white;
-}
-
-.reviews {
-  width: 40%;
-}
 
 footer {
-  background: #222;
+  background-color: #222;
   color: white;
   text-align: center;
   padding: 15px;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px;
+  background: #00aaff;
+  color: white;
+  border: none;
 }
