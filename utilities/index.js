@@ -1,5 +1,7 @@
 const pool = require("../database/db");
 
+const test = await pool.query("SELECT NOW()");
+console.log("DB TEST:", test.rows);
 
 async function getNav() {
   try {
