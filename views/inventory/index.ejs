@@ -1,11 +1,15 @@
+<%- include('../shared/header') %>
+
 <h1>Inventory</h1>
 
 <ul>
   <% classificationList.forEach(item => { %>
-  <li>
-    <a href="/inventory/type/<%= item.classification_id %>">
-      <%= item.classification_name %>
-    </a>
-  </li>
-<% }) %>
+    <li>
+      <a href="/inventory/type/<%= item.classification_id %>">
+        <%= item.classification_name %>
+      </a>
+    </li>
+  <% }) %>
 </ul>
+
+<%- include('../shared/footer') %>   
