@@ -7,7 +7,9 @@ async function getNav() {
     );
 
     let nav = `<ul>`;
-    nav += `<li><a href='/inventory'>Home</a></li>`;
+    nav += `<li><a href='/'>Home</a></li>`;
+    nav += `<li><a href='/inventory'>Inventory</a></li>`;
+    nav += `<li><a href='/account/login'>My Account</a></li>`;
 
     result.rows.forEach(row => {
       nav += `
@@ -63,13 +65,25 @@ async function buildClassificationList(selectedId = null) {
 function buildVehicleDetail(vehicle) {
   return `
     <div class="vehicle-detail">
-      <h1>${vehicle.inv_make} ${vehicle.inv_model}</h1>
-      <img src="${vehicle.inv_image}" alt="">
-      <p>Year: ${vehicle.inv_year}</p>
-      <p>Price: $${Number(vehicle.inv_price).toLocaleString()}</p>
-      <p>Miles: ${Number(vehicle.inv_miles).toLocaleString()}</p>
-      <p>Color: ${vehicle.inv_color}</p>
-      <p>${vehicle.inv_description}</p>
+
+      <div class="vehicle-image">
+        <img src="${vehicle.inv_image}" alt="${vehicle.inv_make} ${vehicle.inv_model}">
+      </div>
+
+      <div class="vehicle-info">
+        <h1>${vehicle.inv_make} ${vehicle.inv_model}</h1>
+
+        <p class="price">$${Number(vehicle.inv_price).toLocaleString()}</p>
+
+        <ul>
+          <li><strong>Year:</strong> ${vehicle.inv_year}</li>
+          <li><strong>Mileage:</strong> ${Number(vehicle.inv_miles).toLocaleString()}</li>
+          <li><strong>Color:</strong> ${vehicle.inv_color}</li>
+        </ul>
+
+        <p>${vehicle.inv_description}</p>
+      </div>
+
     </div>
   `;
 }

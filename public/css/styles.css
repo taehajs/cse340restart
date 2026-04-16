@@ -10,12 +10,11 @@ body {
   padding: 20px;
 }
 
-
 .vehicle-detail {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  align-items: start;
+  display: flex;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 2rem auto;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -23,8 +22,12 @@ body {
 }
 
 .vehicle-image img {
-  width: 100%;
+  max-width: 100%;
   border-radius: 8px;
+}
+
+.vehicle-info {
+  flex: 1;
 }
 
 .vehicle-info h1 {
@@ -37,14 +40,19 @@ body {
   margin: 8px 0;
 }
 
+.price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: green;
+}
+
 .vehicle-info .desc {
   margin-top: 15px;
   line-height: 1.5;
 }
 
-
 @media (max-width: 768px) {
   .vehicle-detail {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 }
