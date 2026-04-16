@@ -1,15 +1,19 @@
-<%- nav %>
+<%- include('../shared/header') %>
 
-<div class="page-container">
-  <h1>Inventory</h1>
+<h1><%= title %></h1>
 
-  <ul class="vehicle-list">
-    <% vehicles.forEach(v => { %>
+<ul>
+  <% if (vehicles && vehicles.length > 0) { %>
+    <% vehicles.forEach(vehicle => { %>
       <li>
-        <a href="/inventory/detail/<%= v.inv_id %>">
-          <%= v.inv_make %> <%= v.inv_model %>
+        <a href="/inventory/detail/<%= vehicle.inv_id %>">
+          <%= vehicle.inv_make %> <%= vehicle.inv_model %>
         </a>
       </li>
     <% }) %>
-  </ul>
-</div>
+  <% } else { %>
+    <li>No vehicles found.</li>
+  <% } %>
+</ul>
+
+<%- include('../shared/footer') %>
