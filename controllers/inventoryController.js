@@ -1,14 +1,13 @@
 const inventoryModel = require("../models/inventoryModel");
 const utilities = require("../utilities");
 
-
 async function buildByClassificationId(req, res, next) {
   try {
     const nav = await utilities.getNav();
     const data = await inventoryModel.getClassifications();
 
     res.render("inventory/index", {
-      title: "Inventory Home",
+      title: "Inventory",
       nav,
       classificationList: data.rows
     });
@@ -41,7 +40,7 @@ async function buildByInventoryId(req, res, next) {
     const nav = await utilities.getNav();
     const data = await inventoryModel.getInventoryById(req.params.invId);
 
-    if (!data.rows.length) {
+    if (!data.rows || data.rows.length === 0) {
       return res.status(404).render("errors/error", {
         title: "Not Found",
         message: "Vehicle not found",
@@ -49,18 +48,19 @@ async function buildByInventoryId(req, res, next) {
       });
     }
 
-    const vehicleHTML = utilities.buildVehicleDetail(data.rows[0]);
+    const vehicle = data.rows[0];
+    const vehicleHTML = utilities.buildVehicleDetail(vehicle);
 
     res.render("inventory/detail", {
-      title: "Vehicle Detail",
+      title: `${vehicle.inv_make} ${vehicle.inv_model}`, // ⭐ 중요
       nav,
       vehicleHTML
     });
+
   } catch (err) {
     next(err);
   }
 }
-
 
 async function buildAddClassification(req, res, next) {
   try {
@@ -107,7 +107,6 @@ async function addInventory(req, res, next) {
     next(err);
   }
 }
-
 
 module.exports = {
   buildByClassificationId,

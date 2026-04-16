@@ -1,5 +1,6 @@
 const pool = require("../database/db");
 
+
 async function getNav() {
   try {
     const result = await pool.query(
@@ -7,9 +8,9 @@ async function getNav() {
     );
 
     let nav = `<ul>`;
-    nav += `<li><a href='/'>Home</a></li>`;
-    nav += `<li><a href='/inventory'>Inventory</a></li>`;
-    nav += `<li><a href='/account/login'>My Account</a></li>`;
+    nav += `<li><a href="/">Home</a></li>`;
+    nav += `<li><a href="/inventory">Inventory</a></li>`;
+    nav += `<li><a href="/account/login">My Account</a></li>`;
 
     result.rows.forEach(row => {
       nav += `
@@ -48,7 +49,7 @@ async function buildClassificationList(selectedId = null) {
     result.rows.forEach(row => {
       list += `
         <option value="${row.classification_id}"
-        ${selectedId == row.classification_id ? "selected" : ""}>
+        ${Number(selectedId) === Number(row.classification_id) ? "selected" : ""}>
           ${row.classification_name}
         </option>`;
     });
@@ -67,7 +68,8 @@ function buildVehicleDetail(vehicle) {
     <div class="vehicle-detail">
 
       <div class="vehicle-image">
-        <img src="${vehicle.inv_image}" alt="${vehicle.inv_make} ${vehicle.inv_model}">
+        <img src="${vehicle.inv_image}" 
+             alt="${vehicle.inv_make} ${vehicle.inv_model}">
       </div>
 
       <div class="vehicle-info">
@@ -81,7 +83,8 @@ function buildVehicleDetail(vehicle) {
           <li><strong>Color:</strong> ${vehicle.inv_color}</li>
         </ul>
 
-        <p>${vehicle.inv_description}</p>
+        <p class="desc">${vehicle.inv_description}</p>
+
       </div>
 
     </div>

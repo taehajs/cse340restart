@@ -20,7 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 
-
 app.use(async (req, res, next) => {
   res.locals.loggedIn = false;
 
@@ -34,9 +33,14 @@ app.use(async (req, res, next) => {
   next();
 });
 
+
 app.use("/", homeRoute);
 app.use("/inventory", inventoryRoute);
 app.use("/account", accountRoute);
+
+app.get("/trigger-error", (req, res, next) => {
+  next(new Error("Intentional 500 Error"));
+});
 
 // 404
 app.use((req, res) => {
@@ -53,7 +57,7 @@ app.use((err, req, res, next) => {
 
   res.status(500).render("errors/error", {
     title: "Server Error",
-    message: "Something went wrong",
+    message: err.message || "Something went wrong",
     nav: res.locals.nav
   });
 });
