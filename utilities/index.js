@@ -26,7 +26,6 @@ async function getNav() {
 
   } catch (err) {
     console.error("NAV ERROR:", err);
-
     return `
       <ul>
         <li><a href="/">Home</a></li>
@@ -36,6 +35,7 @@ async function getNav() {
     `;
   }
 }
+
 
 async function buildClassificationList(selectedId = null) {
   try {
@@ -75,16 +75,17 @@ function buildVehicleDetail(vehicle) {
       <div class="vehicle-info">
         <h1>${vehicle.inv_make} ${vehicle.inv_model}</h1>
 
-        <p class="price">$${Number(vehicle.inv_price).toLocaleString()}</p>
+        <p class="price">
+          $${parseFloat(vehicle.inv_price).toLocaleString("en-US")}
+        </p>
 
         <ul>
           <li><strong>Year:</strong> ${vehicle.inv_year}</li>
-          <li><strong>Mileage:</strong> ${Number(vehicle.inv_miles).toLocaleString()}</li>
+          <li><strong>Mileage:</strong> ${parseFloat(vehicle.inv_miles).toLocaleString("en-US")}</li>
           <li><strong>Color:</strong> ${vehicle.inv_color}</li>
         </ul>
 
         <p class="desc">${vehicle.inv_description}</p>
-
       </div>
 
     </div>
