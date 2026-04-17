@@ -1,19 +1,20 @@
 <%- include('../shared/header') %>
 
-<h1><%= title %></h1>
+<h1>Vehicle List</h1>
 
-<ul>
-  <% if (vehicles && vehicles.length > 0) { %>
-    <% vehicles.forEach(vehicle => { %>
-      <li>
-        <a href="/inventory/detail/<%= vehicle.inv_id %>">
-          <%= vehicle.inv_make %> <%= vehicle.inv_model %>
-        </a>
-      </li>
-    <% }) %>
-  <% } else { %>
-    <li>No vehicles found.</li>
-  <% } %>
-</ul>
+<div class="vehicle-grid">
+  <% vehicles.forEach(vehicle => { %>
+    <div class="vehicle-card">
+      <a href="/inventory/detail/<%= vehicle.inv_id %>">
+        <img src="<%= vehicle.inv_thumbnail %>" alt="">
+        <h2><%= vehicle.inv_make %> <%= vehicle.inv_model %></h2>
+        <p>$<%= Number(vehicle.inv_price).toLocaleString("en-US") %></p>
+      </a>
+
+      <a href="/inventory/edit/<%= vehicle.inv_id %>">Edit</a>
+      <a href="/inventory/delete/<%= vehicle.inv_id %>">Delete</a>
+    </div>
+  <% }) %>
+</div>
 
 <%- include('../shared/footer') %>

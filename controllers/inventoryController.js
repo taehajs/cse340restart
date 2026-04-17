@@ -16,7 +16,6 @@ async function buildByClassificationId(req, res, next) {
   }
 }
 
-
 async function buildInventoryByClassificationId(req, res, next) {
   try {
     const nav = await utilities.getNav();
@@ -34,13 +33,12 @@ async function buildInventoryByClassificationId(req, res, next) {
   }
 }
 
-
 async function buildByInventoryId(req, res, next) {
   try {
     const nav = await utilities.getNav();
     const data = await inventoryModel.getInventoryById(req.params.invId);
 
-    if (!data.rows || data.rows.length === 0) {
+    if (!data.rows.length) {
       return res.status(404).render("errors/error", {
         title: "Not Found",
         message: "Vehicle not found",
@@ -48,24 +46,22 @@ async function buildByInventoryId(req, res, next) {
       });
     }
 
-    const vehicle = data.rows[0];
-    const vehicleHTML = utilities.buildVehicleDetail(vehicle);
+    const vehicleHTML = utilities.buildVehicleDetail(data.rows[0]);
 
     res.render("inventory/detail", {
-      title: `${vehicle.inv_make} ${vehicle.inv_model}`, // ⭐ 중요
+      title: `${data.rows[0].inv_make} ${data.rows[0].inv_model}`,
       nav,
       vehicleHTML
     });
-
   } catch (err) {
     next(err);
   }
 }
 
+// add classification
 async function buildAddClassification(req, res, next) {
   try {
     const nav = await utilities.getNav();
-
     res.render("inventory/add-classification", {
       title: "Add Classification",
       nav
@@ -84,6 +80,7 @@ async function addClassification(req, res, next) {
   }
 }
 
+// add vehicle
 async function buildAddInventory(req, res, next) {
   try {
     const nav = await utilities.getNav();
@@ -108,6 +105,56 @@ async function addInventory(req, res, next) {
   }
 }
 
+// edit
+async function buildEditInventory(req, res, next) {
+  try {
+    const nav = await utilities.getNav();
+    const data = await inventoryModel.getInventoryById(req.params.invId);
+
+    res.render("inventory/edit-inventory", {
+      title: "Edit Vehicle",
+      nav,
+      vehicle: data.rows[0]
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function updateInventory(req, res, next) {
+  try {
+    await inventoryModel.updateInventory(req.body);
+    res.redirect("/inventory");
+  } catch (err) {
+    next(err);
+  }
+}
+
+// delete
+async function buildDeleteInventory(req, res, next) {
+  try {
+    const nav = await utilities.getNav();
+    const data = await inventoryModel.getInventoryById(req.params.invId);
+
+    res.render("inventory/delete-confirm", {
+      title: "Delete Vehicle",
+      nav,
+      vehicle: data.rows[0]
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function deleteInventory(req, res, next) {
+  try {
+    await inventoryModel.deleteInventory(req.body.inv_id);
+    res.redirect("/inventory");
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   buildByClassificationId,
   buildInventoryByClassificationId,
@@ -115,5 +162,9 @@ module.exports = {
   buildAddClassification,
   addClassification,
   buildAddInventory,
-  addInventory
+  addInventory,
+  buildEditInventory,
+  updateInventory,
+  buildDeleteInventory,
+  deleteInventory
 };
