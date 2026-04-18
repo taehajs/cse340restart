@@ -1,14 +1,11 @@
 <%- include("../shared/header") %>
 
-<h1>Account Management</h1>
+<h1>Welcome <%= firstName %></h1>
 
-<p>Welcome, <%= firstName %></p>
-
-<% if (accountType === "Employee" || accountType === "Admin") { %>
+<% if (accountType !== "Client") { %>
   <h2>Inventory Management</h2>
-  <a href="/inventory/management">Manage Inventory</a>
 <% } %>
 
-<a href="/account/update/<%= account_id %>">Update Account</a>
+<p>You are logged in.</p>
 
 <%- include("../shared/footer") %>

@@ -1,7 +1,7 @@
 const accountModel = require("../models/accountModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const utilities = require("../utilities/index.js");
+const utilities = require("../utilities");
 
 exports.buildManagement = async (req, res) => {
   if (!res.locals.loggedIn) {
@@ -13,8 +13,8 @@ exports.buildManagement = async (req, res) => {
   res.render("account/management", {
     title: "Account Management",
     nav: await utilities.getNav(),
-    firstName: account.email,
-    accountType: account.account_type || "Client"
+    firstName: account.first_name,
+    accountType: account.account_type
   });
 };
 
@@ -52,7 +52,7 @@ exports.accountLogin = async (req, res) => {
   const token = jwt.sign(
     {
       account_id: account.account_id,
-      email: account.email,
+      first_name: account.first_name,
       account_type: account.account_type
     },
     process.env.JWT_SECRET,
@@ -78,13 +78,13 @@ exports.buildRegister = async (req, res) => {
 };
 
 exports.registerAccount = async (req, res) => {
-  const { email, password } = req.body;
+  const { first_name, last_name, email, password } = req.body;
 
-  if (!email || !password || password.length < 6) {
+  if (!first_name || !last_name || !email || password.length < 6) {
     return res.render("account/register", {
       title: "Register",
       nav: await utilities.getNav(),
-      message: "Invalid input (password min 6)"
+      message: "All fields required (password ≥ 6)"
     });
   }
 
@@ -100,7 +100,7 @@ exports.registerAccount = async (req, res) => {
 
   const hashed = await bcrypt.hash(password, 10);
 
-  await accountModel.createAccount(email, hashed);
+  await accountModel.createAccount(first_name, last_name, email, hashed);
 
   res.redirect("/account/login");
 };
