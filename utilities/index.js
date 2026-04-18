@@ -59,6 +59,40 @@ async function buildClassificationList(selectedId = null) {
   }
 }
 
+function buildVehicleDetail(vehicle, loggedIn = false) {
+  return `
+    <div class="vehicle-detail">
+
+      <img src="${vehicle.inv_image}" 
+           alt="${vehicle.inv_make} ${vehicle.inv_model}">
+
+      <h1>${vehicle.inv_make} ${vehicle.inv_model}</h1>
+
+      <p>$${parseFloat(vehicle.inv_price).toLocaleString()}</p>
+
+      <ul>
+        <li>Year: ${vehicle.inv_year}</li>
+        <li>Miles: ${vehicle.inv_miles}</li>
+        <li>Color: ${vehicle.inv_color}</li>
+      </ul>
+
+      <p>${vehicle.inv_description}</p>
+
+      ${
+        loggedIn
+          ? `
+        <form method="post" action="/account/favorite">
+          <input type="hidden" name="inv_id" value="${vehicle.inv_id}">
+          <button type="submit">❤️ Add to Favorites</button>
+        </form>
+      `
+          : `<p><a href="/account/login">Login to save favorites</a></p>`
+      }
+
+    </div>
+  `;
+}
+
 function buildVehicleDetail(vehicle) {
   return `
     <div class="vehicle-detail">

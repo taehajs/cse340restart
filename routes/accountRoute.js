@@ -33,6 +33,21 @@ router.post(
   accountController.updatePassword
 );
 
+const favoritesController = require("../controllers/favoritesController");
+const utilities = require("../utilities");
+
+router.post(
+  "/favorite",
+  utilities.checkJWTToken,
+  favoritesController.addFavorite
+);
+
+router.get(
+  "/favorites",
+  utilities.checkJWTToken,
+  favoritesController.buildFavorites
+);
+
 router.get("/logout", accountController.logout);
 
 module.exports = router;

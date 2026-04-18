@@ -118,6 +118,10 @@ async function addInventory(req, res) {
   res.redirect("/inventory/management");
 }
 
+const vehicleHTML = utilities.buildVehicleDetail(
+  data.rows[0],
+  res.locals.loggedIn
+);
 
 async function buildEditInventory(req, res, next) {
   try {

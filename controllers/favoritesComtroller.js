@@ -6,13 +6,11 @@ exports.addFavorite = async (req, res) => {
     const accountId = res.locals.accountData.account_id;
     const { inv_id } = req.body;
 
-    if (!inv_id) {
-      throw new Error("Invalid vehicle");
-    }
+    if (!inv_id) throw new Error("Invalid vehicle");
 
     await favModel.addFavorite(accountId, inv_id);
-    res.redirect("/account/favorites");
 
+    res.redirect("/account/favorites");
   } catch (err) {
     res.render("errors/error", {
       title: "Error",
@@ -25,14 +23,13 @@ exports.addFavorite = async (req, res) => {
 exports.buildFavorites = async (req, res) => {
   try {
     const accountId = res.locals.accountData.account_id;
-    const data = await favModel.getFavorites(accountId);
+    const vehicles = await favModel.getFavorites(accountId);
 
     res.render("account/favorites", {
       title: "My Favorites",
       nav: await utilities.getNav(),
-      vehicles: data
+      vehicles
     });
-
   } catch (err) {
     res.render("errors/error", {
       title: "Error",
