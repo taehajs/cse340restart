@@ -122,3 +122,44 @@ exports.buildUpdateAccount = async (req, res) => {
     account
   });
 };
+
+exports.updateAccount = async (req, res) => {
+  const { account_id, first_name, last_name, email } = req.body;
+
+  if (!first_name || !last_name || !email) {
+    return res.render("account/update", {
+      title: "Edit Account",
+      nav: await utilities.getNav(),
+      message: "All fields required",
+      account: req.body
+    });
+  }
+
+  await accountModel.updateAccount(
+    first_name,
+    last_name,
+    email,
+    account_id
+  );
+
+  res.redirect("/account/management");
+};
+
+exports.updatePassword = async (req, res) => {
+  const { account_id, password } = req.body;
+
+  if (!password || password.length < 6) {
+    return res.render("account/update", {
+      title: "Edit Account",
+      nav: await utilities.getNav(),
+      message: "Password must be at least 6 characters",
+      account: res.locals.accountData
+    });
+  }
+
+  const hashed = await bcrypt.hash(password, 10);
+
+  await accountModel.updatePassword(hashed, account_id);
+
+  res.redirect("/account/management");
+};
