@@ -17,7 +17,6 @@ exports.buildManagement = async (req, res) => {
     accountType: account.account_type
   });
 };
-
 exports.buildLogin = async (req, res) => {
   res.render("account/login", {
     title: "Login",
@@ -69,6 +68,7 @@ exports.logout = (req, res) => {
   res.redirect("/");
 };
 
+
 exports.buildRegister = async (req, res) => {
   res.render("account/register", {
     title: "Register",
@@ -77,6 +77,7 @@ exports.buildRegister = async (req, res) => {
   });
 };
 
+
 exports.registerAccount = async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
 
@@ -84,7 +85,10 @@ exports.registerAccount = async (req, res) => {
     return res.render("account/register", {
       title: "Register",
       nav: await utilities.getNav(),
-      message: "All fields required (password ≥ 6)"
+      message: "All fields required (password ≥ 6)",
+      first_name,
+      last_name,
+      email
     });
   }
 
@@ -94,7 +98,10 @@ exports.registerAccount = async (req, res) => {
     return res.render("account/register", {
       title: "Register",
       nav: await utilities.getNav(),
-      message: "Email already exists"
+      message: "Email already exists",
+      first_name,
+      last_name,
+      email
     });
   }
 
