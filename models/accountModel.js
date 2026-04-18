@@ -1,5 +1,11 @@
 const pool = require("../database/db");
 
+async function getAccountByEmail(email) {
+  const sql = "SELECT * FROM account WHERE account_email = $1";
+  const result = await pool.query(sql, [email]);
+  return result.rows[0];
+}
+
 async function createAccount(email, password) {
   const sql = `
     INSERT INTO account (
@@ -12,12 +18,10 @@ async function createAccount(email, password) {
     VALUES ($1, $2, $3, $4, 'Client')
     RETURNING *;
   `;
-  return await pool.query(sql, [
-    "User",
-    "User",
-    email,
-    password
-  ]);
+  return pool.query(sql, ["User", "User", email, password]);
 }
 
-module.exports = { createAccount };
+module.exports = {
+  getAccountByEmail,
+  createAccount
+};
