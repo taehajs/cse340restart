@@ -17,6 +17,7 @@ exports.buildManagement = async (req, res) => {
     accountType: account.account_type
   });
 };
+
 exports.buildLogin = async (req, res) => {
   res.render("account/login", {
     title: "Login",
@@ -68,7 +69,6 @@ exports.logout = (req, res) => {
   res.redirect("/");
 };
 
-
 exports.buildRegister = async (req, res) => {
   res.render("account/register", {
     title: "Register",
@@ -110,4 +110,15 @@ exports.registerAccount = async (req, res) => {
   await accountModel.createAccount(first_name, last_name, email, hashed);
 
   res.redirect("/account/login");
+};
+
+
+exports.buildUpdateAccount = async (req, res) => {
+  const account = res.locals.accountData;
+
+  res.render("account/update", {
+    title: "Edit Account",
+    nav: await utilities.getNav(),
+    account
+  });
 };
