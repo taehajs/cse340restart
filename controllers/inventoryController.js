@@ -1,6 +1,7 @@
 const inventoryModel = require("../models/inventoryModel");
 const utilities = require("../utilities");
 
+
 async function buildByClassificationId(req, res, next) {
   try {
     const nav = await utilities.getNav();
@@ -46,13 +47,18 @@ async function buildByInventoryId(req, res, next) {
       });
     }
 
-    const vehicleHTML = utilities.buildVehicleDetail(data.rows[0]);
+   
+    const vehicleHTML = utilities.buildVehicleDetail(
+      data.rows[0],
+      res.locals.loggedIn
+    );
 
     res.render("inventory/detail", {
       title: `${data.rows[0].inv_make} ${data.rows[0].inv_model}`,
       nav,
       vehicleHTML
     });
+
   } catch (err) {
     next(err);
   }
@@ -68,7 +74,6 @@ async function buildManagement(req, res) {
     items: data.rows
   });
 }
-
 
 async function buildAddClassification(req, res) {
   res.render("inventory/add-classification", {
@@ -118,10 +123,6 @@ async function addInventory(req, res) {
   res.redirect("/inventory/management");
 }
 
-const vehicleHTML = utilities.buildVehicleDetail(
-  data.rows[0],
-  res.locals.loggedIn
-);
 
 async function buildEditInventory(req, res, next) {
   try {
@@ -147,7 +148,6 @@ async function updateInventory(req, res, next) {
   }
 }
 
-
 async function buildDeleteInventory(req, res, next) {
   try {
     const nav = await utilities.getNav();
@@ -171,7 +171,6 @@ async function deleteInventory(req, res, next) {
     next(err);
   }
 }
-
 
 module.exports = {
   buildByClassificationId,
