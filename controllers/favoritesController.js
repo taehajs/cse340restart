@@ -1,40 +1,43 @@
-const favModel = require("../models/favoritesModel");
+const favoritesModel = require("../models/favoritesModel");
 const utilities = require("../utilities");
 
-exports.addFavorite = async (req, res) => {
+async function addFavorite(req, res, next) {
   try {
-    const accountId = res.locals.accountData.account_id;
-    const { inv_id } = req.body;
+    const user_id = res.locals.accountData.account_id;
+    const inv_id = req.body.inv_id;
 
-    if (!inv_id) throw new Error("Invalid vehicle");
+    const result = await favoritesModel.addFavorite(user_id, inv_id);
 
-    await favModel.addFavorite(accountId, inv_id);
+    if (result.rowCount) {
+      return res.redirect("/account/favorites");
+    }
 
     res.redirect("/account/favorites");
-  } catch (err) {
-    res.render("errors/error", {
-      title: "Error",
-      message: err.message,
-      nav: await utilities.getNav()
-    });
-  }
-};
 
-exports.buildFavorites = async (req, res) => {
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function buildFavorites(req, res, next) {
   try {
-    const accountId = res.locals.accountData.account_id;
-    const vehicles = await favModel.getFavorites(accountId);
+    const user_id = res.locals.accountData.account_id;
+    const nav = await utilities.getNav();
+
+    const data = await favoritesModel.getFavoritesByUserId(user_id);
 
     res.render("account/favorites", {
       title: "My Favorites",
-      nav: await utilities.getNav(),
-      vehicles
+      nav,
+      favorites: data.rows
     });
+
   } catch (err) {
-    res.render("errors/error", {
-      title: "Error",
-      message: err.message,
-      nav: await utilities.getNav()
-    });
+    next(err);
   }
+}
+
+module.exports = {
+  addFavorite,
+  buildFavorites
 };
