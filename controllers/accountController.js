@@ -21,7 +21,8 @@ exports.buildManagement = async (req, res) => {
 exports.buildLogin = async (req, res) => {
   res.render("account/login", {
     title: "Login",
-    nav: await utilities.getNav()
+    nav: await utilities.getNav(),
+    message: null 
   });
 };
 
