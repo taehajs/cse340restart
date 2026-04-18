@@ -2,14 +2,20 @@
 
 <main>
   <section class="vehicle-container">
-    <%- vehicleHTML %>
+    <h1><%= vehicle.inv_make %> <%= vehicle.inv_model %></h1>
+
+    <ul>
+      <li>Price: <%= vehicle.inv_price %></li>
+      <li>Year: <%= vehicle.inv_year %></li>
+      <li>Mileage: <%= vehicle.inv_miles %></li>
+      <li>Description: <%= vehicle.inv_description %></li>
+    </ul>
+
+    <form method="post" action="/account/favorite">
+      <input type="hidden" name="inv_id" value="<%= vehicle.inv_id %>">
+      <button type="submit">Add to Favorites</button>
+    </form>
   </section>
 </main>
-
-<form method="post" action="/account/favorite">
-  <input type="hidden" name="inv_id" value="<%= vehicle.inv_id %>">
-  <button type="submit">Add to Favorites</button>
-</form>
-
 
 <%- include('../shared/footer') %>
