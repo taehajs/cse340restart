@@ -1,7 +1,7 @@
 const accountModel = require("../models/accountModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const utilities = require("../utilities/index.js"); 
+const utilities = require("../utilities/index.js");
 
 exports.buildManagement = async (req, res) => {
   if (!res.locals.loggedIn) {
@@ -14,7 +14,7 @@ exports.buildManagement = async (req, res) => {
     title: "Account Management",
     nav: await utilities.getNav(),
     firstName: account.email,
-    accountType: "Client"
+    accountType: account.account_type || "Client"
   });
 };
 
@@ -51,7 +51,8 @@ exports.accountLogin = async (req, res) => {
   const token = jwt.sign(
     {
       account_id: account.account_id,
-      email: account.account_email
+      email: account.account_email,
+      account_type: account.account_type
     },
     process.env.JWT_SECRET,
     { expiresIn: "1h" }
@@ -76,6 +77,24 @@ exports.buildRegister = async (req, res) => {
 
 exports.registerAccount = async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password || password.length < 6) {
+    return res.render("account/register", {
+      title: "Register",
+      nav: await utilities.getNav(),
+      message: "Invalid input (password min 6)"
+    });
+  }
+
+  const existing = await accountModel.getAccountByEmail(email);
+
+  if (existing) {
+    return res.render("account/register", {
+      title: "Register",
+      nav: await utilities.getNav(),
+      message: "Email already exists"
+    });
+  }
 
   const hashed = await bcrypt.hash(password, 10);
 

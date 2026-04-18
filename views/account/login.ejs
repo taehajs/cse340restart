@@ -2,8 +2,8 @@
 
 <h1>Login</h1>
 
-<% if (typeof message !== "undefined") { %>
-  <p><%= message %></p>
+<% if (message) { %>
+  <p class="notice"><%= message %></p>
 <% } %>
 
 <form method="post" action="/account/login">
