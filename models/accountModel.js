@@ -1,7 +1,7 @@
 const pool = require("../database/db");
 
 async function getAccountByEmail(email) {
-  const sql = "SELECT * FROM account WHERE account_email = $1";
+  const sql = "SELECT * FROM account WHERE email = $1"; 
   const result = await pool.query(sql, [email]);
   return result.rows[0];
 }
