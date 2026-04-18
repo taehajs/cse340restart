@@ -1,11 +1,13 @@
 const express = require("express");
 const router = new express.Router();
-const accountController = require("../controllers/accountController");
-const utilities = require("../utilities");
 
+const accountController = require("../controllers/accountController");
+const favoritesController = require("../controllers/favoritesController");
+const utilities = require("../utilities");
 
 router.get("/login", accountController.buildLogin);
 router.post("/login", accountController.accountLogin);
+
 router.get("/register", accountController.buildRegister);
 router.post("/register", accountController.registerAccount);
 
@@ -32,9 +34,6 @@ router.post(
   utilities.checkJWTToken,
   accountController.updatePassword
 );
-
-const favoritesController = require("../controllers/favoritesController");
-const utilities = require("../utilities");
 
 router.post(
   "/favorite",
