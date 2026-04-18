@@ -1,4 +1,4 @@
-const pool = require("../database/");
+const pool = require("../database/db");
 
 async function getAccountByEmail(email) {
   const result = await pool.query(
