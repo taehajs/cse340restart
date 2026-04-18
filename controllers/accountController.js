@@ -1,7 +1,7 @@
 const accountModel = require("../models/accountModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const utilities = require("../utilities");
+const utilities = require("../utilities/index.js"); 
 
 exports.buildManagement = async (req, res) => {
   if (!res.locals.loggedIn) {

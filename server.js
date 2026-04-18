@@ -16,7 +16,7 @@ const homeRoute = require("./routes/homeRoute");
 const inventoryRoute = require("./routes/inventoryRoute");
 const accountRoute = require("./routes/accountRoute");
 
-const utilities = require("./utilities");
+const utilities = require("./utilities/index.js"); // ⭐ 중요
 
 const app = express();
 
@@ -28,8 +28,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cookieParser());
-app.use(utilities.checkJWTToken); // ⭐ 추가
+app.use(utilities.checkJWTToken); // ⭐ JWT 미들웨어
 
+// nav
 app.use(async (req, res, next) => {
   try {
     res.locals.nav = await utilities.getNav();
@@ -40,10 +41,12 @@ app.use(async (req, res, next) => {
   next();
 });
 
+// routes
 app.use("/", homeRoute);
 app.use("/inventory", inventoryRoute);
 app.use("/account", accountRoute);
 
+// test 500
 app.get("/trigger-error", (req, res, next) => {
   next(new Error("Intentional 500 Error"));
 });
