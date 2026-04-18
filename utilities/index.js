@@ -105,9 +105,20 @@ function checkJWTToken(req, res, next) {
   }
 }
 
+function checkEmployee(req, res, next) {
+  if (
+    res.locals.loggedIn &&
+    res.locals.accountData.account_type !== "Client"
+  ) {
+    return next();
+  }
+  return res.redirect("/account/login");
+}
+
 module.exports = {
   getNav,
   buildClassificationList,
   buildVehicleDetail,
-  checkJWTToken
+  checkJWTToken,
+  checkEmployee 
 };

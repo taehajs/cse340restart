@@ -58,54 +58,67 @@ async function buildByInventoryId(req, res, next) {
   }
 }
 
-// add classification
-async function buildAddClassification(req, res, next) {
-  try {
-    const nav = await utilities.getNav();
-    res.render("inventory/add-classification", {
+
+async function buildManagement(req, res) {
+  const data = await inventoryModel.getAllInventory();
+
+  res.render("inventory/management", {
+    title: "Inventory Management",
+    nav: await utilities.getNav(),
+    items: data.rows
+  });
+}
+
+
+async function buildAddClassification(req, res) {
+  res.render("inventory/add-classification", {
+    title: "Add Classification",
+    nav: await utilities.getNav()
+  });
+}
+
+async function addClassification(req, res) {
+  const { classification_name } = req.body;
+
+  if (!classification_name) {
+    return res.render("inventory/add-classification", {
       title: "Add Classification",
-      nav
+      nav: await utilities.getNav(),
+      errors: [{ msg: "Classification name required" }],
+      classification_name
     });
-  } catch (err) {
-    next(err);
   }
+
+  await inventoryModel.addClassification(classification_name);
+  res.redirect("/inventory/management");
 }
 
-async function addClassification(req, res, next) {
-  try {
-    await inventoryModel.addClassification(req.body.classification_name);
-    res.redirect("/inventory");
-  } catch (err) {
-    next(err);
-  }
+
+async function buildAddInventory(req, res) {
+  const classificationList = await utilities.buildClassificationList();
+
+  res.render("inventory/add-inventory", {
+    title: "Add Inventory",
+    nav: await utilities.getNav(),
+    classificationList
+  });
 }
 
-// add vehicle
-async function buildAddInventory(req, res, next) {
-  try {
-    const nav = await utilities.getNav();
-    const classificationList = await utilities.buildClassificationList();
-
-    res.render("inventory/add-inventory", {
-      title: "Add Vehicle",
-      nav,
-      classificationList
+async function addInventory(req, res) {
+  if (!req.body.inv_make) {
+    return res.render("inventory/add-inventory", {
+      title: "Add Inventory",
+      nav: await utilities.getNav(),
+      message: "All fields required",
+      classificationList: await utilities.buildClassificationList()
     });
-  } catch (err) {
-    next(err);
   }
+
+  await inventoryModel.addInventory(req.body);
+  res.redirect("/inventory/management");
 }
 
-async function addInventory(req, res, next) {
-  try {
-    await inventoryModel.addInventory(req.body);
-    res.redirect("/inventory");
-  } catch (err) {
-    next(err);
-  }
-}
 
-// edit
 async function buildEditInventory(req, res, next) {
   try {
     const nav = await utilities.getNav();
@@ -124,13 +137,13 @@ async function buildEditInventory(req, res, next) {
 async function updateInventory(req, res, next) {
   try {
     await inventoryModel.updateInventory(req.body);
-    res.redirect("/inventory");
+    res.redirect("/inventory/management");
   } catch (err) {
     next(err);
   }
 }
 
-// delete
+
 async function buildDeleteInventory(req, res, next) {
   try {
     const nav = await utilities.getNav();
@@ -149,16 +162,18 @@ async function buildDeleteInventory(req, res, next) {
 async function deleteInventory(req, res, next) {
   try {
     await inventoryModel.deleteInventory(req.body.inv_id);
-    res.redirect("/inventory");
+    res.redirect("/inventory/management");
   } catch (err) {
     next(err);
   }
 }
 
+
 module.exports = {
   buildByClassificationId,
   buildInventoryByClassificationId,
   buildByInventoryId,
+  buildManagement,
   buildAddClassification,
   addClassification,
   buildAddInventory,
