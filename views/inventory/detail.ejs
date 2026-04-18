@@ -6,4 +6,10 @@
   </section>
 </main>
 
+<form method="post" action="/account/favorite">
+  <input type="hidden" name="inv_id" value="<%= vehicle.inv_id %>">
+  <button type="submit">Add to Favorites</button>
+</form>
+
+
 <%- include('../shared/footer') %>

@@ -1,0 +1,13 @@
+<%- include("../shared/header") %>
+
+<h1>My Favorite Vehicles</h1>
+
+<ul>
+  <% vehicles.forEach(v => { %>
+    <li>
+      <%= v.inv_make %> <%= v.inv_model %> - $<%= v.inv_price %>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include("../shared/footer") %>
