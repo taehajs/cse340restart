@@ -26,21 +26,19 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+
 app.use(cookieParser());
+app.use(utilities.checkJWTToken); // ⭐ 추가
 
 app.use(async (req, res, next) => {
-  res.locals.loggedIn = false;
-
   try {
     res.locals.nav = await utilities.getNav();
   } catch (err) {
     console.error("NAV ERROR:", err);
     res.locals.nav = "<ul><li><a href='/'>Home</a></li></ul>";
   }
-
   next();
 });
-
 
 app.use("/", homeRoute);
 app.use("/inventory", inventoryRoute);

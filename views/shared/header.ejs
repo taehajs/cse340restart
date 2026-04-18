@@ -14,5 +14,11 @@
 <nav>
   <a href="/">Home</a>
   <a href="/inventory">Inventory</a>
-  <a href="/account/login">My Account</a>
+
+  <% if (loggedIn) { %>
+    <a href="/account/management">My Account</a>
+    <a href="/account/logout">Logout</a>
+  <% } else { %>
+    <a href="/account/login">Login</a>
+  <% } %>
 </nav>
