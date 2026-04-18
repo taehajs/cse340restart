@@ -1,4 +1,4 @@
-const pool = require("../database/");
+const pool = require("../database");
 
 async function addFavorite(user_id, inv_id) {
   try {
