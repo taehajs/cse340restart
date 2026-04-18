@@ -22,7 +22,7 @@ exports.buildLogin = async (req, res) => {
   res.render("account/login", {
     title: "Login",
     nav: await utilities.getNav(),
-    message: null 
+    message: null
   });
 };
 
@@ -39,7 +39,7 @@ exports.accountLogin = async (req, res) => {
     });
   }
 
-  const match = await bcrypt.compare(password, account.account_password);
+  const match = await bcrypt.compare(password, account.password);
 
   if (!match) {
     return res.render("account/login", {
@@ -52,7 +52,7 @@ exports.accountLogin = async (req, res) => {
   const token = jwt.sign(
     {
       account_id: account.account_id,
-      email: account.account_email,
+      email: account.email,
       account_type: account.account_type
     },
     process.env.JWT_SECRET,
@@ -72,7 +72,8 @@ exports.logout = (req, res) => {
 exports.buildRegister = async (req, res) => {
   res.render("account/register", {
     title: "Register",
-    nav: await utilities.getNav()
+    nav: await utilities.getNav(),
+    message: null
   });
 };
 

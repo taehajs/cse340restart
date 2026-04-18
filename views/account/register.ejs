@@ -1,4 +1,4 @@
-<%- include('../shared/header') %>
+<%- include("../shared/header") %>
 
 <h1>Register</h1>
 
@@ -7,9 +7,13 @@
 <% } %>
 
 <form method="post" action="/account/register">
-  <input type="email" name="email" placeholder="Email" required>
-  <input type="password" name="password" placeholder="Password (min 6)" required>
+  <label>Email:</label>
+  <input type="email" name="email" required>
+
+  <label>Password:</label>
+  <input type="password" name="password" required>
+
   <button type="submit">Register</button>
 </form>
 
-<%- include('../shared/footer') %>
+<%- include("../shared/footer") %>
